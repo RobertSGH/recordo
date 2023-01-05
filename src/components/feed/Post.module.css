@@ -1,0 +1,27 @@
+.postcontainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 70%;
+  margin: 2rem auto;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  height: 20rem;
+  background: rgb(233, 2, 200);
+  background: linear-gradient(
+    326deg,
+    rgba(233, 2, 200, 0.10152284263959388) 0%,
+    rgba(0, 212, 255, 0) 100%
+  );
+}
+
+.postcontainer img,
+video {
+  height: 7rem;
+  width: 5rem;
+}
+
+/* .items {
+} */

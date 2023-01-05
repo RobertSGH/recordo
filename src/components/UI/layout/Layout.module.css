@@ -1,0 +1,17 @@
+.layout {
+  border: 3px solid green;
+  display: flex;
+}
+
+.left {
+  border: 3px solid rgb(128, 0, 0);
+  margin-right: 17rem;
+}
+
+.main {
+  border: 3px solid rgb(128, 0, 0);
+  padding: 50px;
+  margin-left: 0;
+  display: flex;
+  flex-direction: column;
+}

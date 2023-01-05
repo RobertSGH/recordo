@@ -1,0 +1,33 @@
+.login {
+  display: block;
+  padding: 1rem;
+}
+
+.login img {
+  width: 5%;
+  height: 5%;
+}
+
+.items {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.button {
+  cursor: pointer;
+  background-color: #7a0144;
+  border: 1px solid #7a0144;
+  border-radius: 10px;
+  padding: 0.4rem 0.1rem;
+  color: white;
+  font-size: 0.6rem;
+  width: 5%;
+  height: 5%;
+}
+
+.button:hover,
+.button:active {
+  background-color: #9c095a;
+  border-color: #9c095a;
+}

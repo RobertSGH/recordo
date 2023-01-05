@@ -1,0 +1,50 @@
+.form {
+  position: relative;
+  margin: auto;
+  align-items: center;
+  align-content: center;
+}
+
+.control {
+  margin-bottom: 0.5rem;
+}
+
+.control label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.control input,
+.control textarea {
+  font: inherit;
+  padding: 0.35rem;
+  border-radius: 4px;
+  background-color: #f0f0f0;
+  border: 1px solid #c1d1d1;
+  display: block;
+  width: 100%;
+  font-size: 1.25rem;
+}
+
+.control input:focus,
+.control textarea:focus {
+  background-color: #f8cbf1;
+  outline-color: rgb(81, 0, 128);
+}
+
+.progress {
+  height: 20px;
+  background-color: #ddd;
+  border-radius: 4px;
+}
+
+.progress::before {
+  content: '';
+  height: 20px;
+  display: block;
+  background-color: #7a0144;
+
+  border-radius: 4px;
+  transition: width 0.2s ease;
+}
