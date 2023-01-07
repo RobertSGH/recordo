@@ -23,6 +23,8 @@ const PostList = (props) => {
     const documents = querySnapshot.docs;
     const posts = documents.map((doc) => ({ ...doc.data(), id: doc.id }));
     setList(posts);
+
+    return unsub();
   });
 
   useEffect(() => {

@@ -46,6 +46,7 @@ export const Post = (props) => {
 
   const getLikes = async () => {
     const data = await getDocs(likesDoc);
+
     setLikes(
       data.docs.map((doc) => ({ userId: doc.data().userId, likeId: doc.id }))
     );

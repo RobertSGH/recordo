@@ -14,7 +14,6 @@ export const Login = () => {
   const auth = getAuth();
   const [user] = useAuthState(auth);
   const [siggnedIn, setSiggnedIn] = useState(false);
-  const [guestSiggnedIn, setGuestSiggnedIn] = useState(false);
 
   const signInAsGuest = async () => {
     await signInAnonymously(auth);
@@ -22,7 +21,6 @@ export const Login = () => {
       displayName: 'Guest' + Math.floor(Math.random() * 100 + 1),
     });
     setSiggnedIn(true);
-    setGuestSiggnedIn(true);
   };
 
   const signInWithGoogle = async () => {
@@ -53,8 +51,8 @@ export const Login = () => {
       )}
       <p>{user?.displayName || user?.uid}</p>
       <div className={classes.items}>
-        {guestSiggnedIn && <img src={user?.photoURL} />}
-        {siggnedIn && (
+        {siggnedIn && <img src={user?.photoURL} alt='imglogo' />}
+        {user && (
           <button className={classes.button} onClick={signUserOut}>
             Sign out
           </button>
