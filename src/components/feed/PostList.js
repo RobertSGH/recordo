@@ -14,22 +14,14 @@ const PostList = (props) => {
   const db = getFirestore();
   const postsRef = collection(db, 'posts');
 
-  const getPosts = async () => {
-    const data = await getDocs(postsRef);
-    setList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-  };
-
-  const unsub = onSnapshot(postsRef, (querySnapshot) => {
-    const documents = querySnapshot.docs;
-    const posts = documents.map((doc) => ({ ...doc.data(), id: doc.id }));
-    setList(posts);
-
-    return unsub();
-  });
-
   useEffect(() => {
-    getPosts();
-    unsub();
+    const unsub = onSnapshot(postsRef, (querySnapshot) => {
+      const documents = querySnapshot.docs;
+      const posts = documents.map((doc) => ({ ...doc.data(), id: doc.id }));
+      setList(posts);
+    });
+
+    return unsub;
   }, []);
 
   return (

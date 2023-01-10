@@ -7,6 +7,7 @@ import {
   getDocs,
   doc,
   deleteDoc,
+  onSnapshot,
 } from 'firebase/firestore';
 import classes from './Post.module.css';
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -18,39 +19,19 @@ export const Post = (props) => {
   const db = getFirestore();
   const [user] = useAuthState(auth);
   const [likes, setLikes] = useState(null);
-
-  let element;
-
-  if (post.fileurl) {
-    if (post.fileurl.match(/\.(jpeg|jpg|gif|png)$|\.(jpeg|jpg|gif|png)/)) {
-      element = (
-        <img
-          src={post.fileurl}
-          onClick={() => window.location.assign(post.fileurl)}
-        />
-      );
-    } else {
-      element = (
-        <video
-          src={post.fileurl}
-          controls
-          type='video/mp4'
-          onClick={() => window.location.assign(post.fileurl)}
-        />
-      );
-    }
-  }
-
   const likesRef = collection(db, 'likes');
   const likesDoc = query(likesRef, where('postId', '==', post.id));
 
-  const getLikes = async () => {
-    const data = await getDocs(likesDoc);
+  useEffect(() => {
+    const unsub = onSnapshot(likesDoc, (querySnapshot) => {
+      const documents = querySnapshot.docs;
+      setLikes(
+        documents.map((doc) => ({ userId: doc.data().userId, likeId: doc.id }))
+      );
+    });
 
-    setLikes(
-      data.docs.map((doc) => ({ userId: doc.data().userId, likeId: doc.id }))
-    );
-  };
+    return unsub;
+  }, []);
 
   const addLike = async () => {
     try {
@@ -59,7 +40,10 @@ export const Post = (props) => {
         postId: post.id,
       });
       if (user) {
-        setLikes((prev) => [...prev, { userId: user?.uid, likeId: newDoc.id }]);
+        setLikes((prev) => [
+          ...prev.filter((like) => like.userId !== user.uid),
+          { userId: user?.uid, likeId: newDoc.id },
+        ]);
       }
     } catch (err) {
       console.log(err);
@@ -88,10 +72,27 @@ export const Post = (props) => {
 
   const hasUserLiked = likes?.find((like) => like.userId === user?.uid);
 
-  useEffect(() => {
-    getLikes();
-  }, []);
+  let element;
 
+  if (post.fileurl) {
+    if (post.fileurl.match(/\.(jpeg|jpg|gif|png)$|\.(jpeg|jpg|gif|png)/)) {
+      element = (
+        <img
+          src={post.fileurl}
+          onClick={() => window.location.assign(post.fileurl)}
+        />
+      );
+    } else {
+      element = (
+        <video
+          src={post.fileurl}
+          controls
+          type='video/mp4'
+          onClick={() => window.location.assign(post.fileurl)}
+        />
+      );
+    }
+  }
   return (
     <div className={classes.postcontainer}>
       <div className={classes.items}>

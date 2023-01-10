@@ -3,6 +3,7 @@ import Layout from './components/UI/layout/Layout';
 import { initializeApp } from 'firebase/app';
 import { getDatabase } from 'firebase/database';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBNogwN8AELoHzMzvjK78eihuzOls0kx38',
@@ -21,7 +22,11 @@ export const auth = getAuth();
 export const provider = new GoogleAuthProvider();
 
 function App() {
-  return <Layout />;
+  return (
+    <Router>
+      <Layout />
+    </Router>
+  );
 }
 
 export default App;

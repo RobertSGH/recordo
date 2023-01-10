@@ -1,137 +1,121 @@
-import React, { useState, useEffect } from 'react';
-import { getAuth } from 'firebase/auth';
+import React, { useState } from 'react';
 import {
   collection,
   getFirestore,
   addDoc,
   query,
   where,
-  getDocs,
-  doc,
-  deleteDoc,
   onSnapshot,
 } from 'firebase/firestore';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../../App';
+import classes from './Favs.module.css';
+import { Route, Link } from 'react-router-dom';
 
 const MessagingComponent = (props) => {
-  const { message } = props;
   const [conversations, setConversations] = useState([]);
   const [messages, setMessages] = useState([]);
-  const [senderNames, setSenderNames] = useState({});
   const [newMessage, setNewMessage] = useState('');
   const db = getFirestore();
   const [user] = useAuthState(auth);
   const [selectedConversationId, setSelectedConversationId] = useState(null);
 
-  useEffect(() => {
-    const conversationsReff = collection(db, 'conversations');
-    const unsub = onSnapshot(conversationsReff, (doc) => {
-      const updatedConversations = doc.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setConversations(updatedConversations);
+  async function fetchconversations() {
+    try {
+      const conversationsReff = collection(db, 'conversations');
+      const q = query(conversationsReff, where('recipient', '==', user?.uid));
+
+      const unsub = onSnapshot(q, (doc) => {
+        const updatedConversations = doc.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setConversations(updatedConversations);
+      });
+
+      return () => unsub();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const getMessages = async () => {
+    try {
+      const messagesRef = collection(db, 'messages');
+      const q = query(messagesRef);
+
+      const unsub = onSnapshot(q, (doc) => {
+        const updatedMessages = doc.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setMessages(updatedMessages);
+      });
+      console.log(messages);
+      return () => unsub();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleSendMessage = async () => {
+    const messagesRef = collection(db, 'messages');
+
+    await addDoc(messagesRef, {
+      conversation: selectedConversationId,
+      message: newMessage,
+      userId: user?.uid,
+      senderName: user?.displayName,
+      senderPhoto: user?.photoURL,
     });
 
-    return () => unsub();
-  }, []);
-
-  // const getMessages = async () => {
-  //   const messagesRef = collection(db, 'messages');
-  //   const messagesDoc = query(messagesRef, where('recipient', '==', user.uid));
-  //   const data = await getDocs(messagesDoc);
-  //   console.log(data);
-
-  //   setMessages(
-  //     data.docs.map((doc) => ({
-  //       message: doc.data().message,
-  //       messageId: doc.id,
-  //       createdAt: doc.data().createdAt,
-  //       sender: doc.data().sender,
-  //     }))
-  //   );
-  //   console.log(messages);
-  // };
-
-  // useEffect(() => {
-  //   getMessages();
-  // });
-
-  function handleChange(event) {
-    // setMessage(event.target.value);
-  }
-
-  function handleSubmit(event) {
-    // event.preventDefault();
-    // const messagesRef = getFirestore().doc(`messages/${recipient}`);
-    // messagesRef
-    //   .update({
-    //     messages: getFirestore().FieldValue.arrayUnion({
-    //       sender: getAuth().currentUser.uid,
-    //       message,
-    //       timestamp: getFirestore().FieldValue.serverTimestamp(),
-    //     }),
-    //   })
-    //   .then(() => {
-    //     setMessage('');
-    //   });
-  }
+    setNewMessage('');
+  };
 
   function handleSelectConversation(conversationId) {
     setSelectedConversationId(conversationId);
   }
 
   return (
-    <div className='messaging-container'>
-      <div className='conversations'>
+    <div>
+      <div>
+        <label onClick={fetchconversations}>Conversations</label>
         {conversations.map((conversation) => (
           <div
             key={conversation.id}
-            className={`conversation ${
-              conversation.id === selectedConversationId ? 'selected' : ''
-            }`}
             onClick={() => handleSelectConversation(conversation.id)}
           >
-            <div className='conversation-header'>
+            <div onClick={getMessages}>
               <img src={conversation.photoUrl} alt={conversation.name} />
-              <div className='conversation-info'>
-                <h4>{conversation.name}</h4>
+              <div>
+                <h4>{conversation.senderName}</h4>
                 <p>{conversation.latestMessage}</p>
-              </div>
-              <div className='timestamp'>
-                {/* {new Date(conversation.timestamp.toDate()).toLocaleTimeString()} */}
               </div>
             </div>
           </div>
         ))}
       </div>
-      {/* {selectedConversationId && (
-        <div className="messages">
+      {selectedConversationId && (
+        <div className={classes.messages}>
           {messages.map((message) => (
-            <div key={message.id} className={`message ${message.sender === firebase.auth().currentUser.uid ? 'sent' : 'received'}`}>
+            <div key={message.id}>
               <p>{message.message}</p>
-              {message.sender !== firebase.auth().currentUser.uid && (
-                <div className="sender-name">{senderNames[message.sender]}</div>
-              )}
-              <div className="timestamp">
-                {new Date(message.timestamp.toDate()).toLocaleTimeString()}
-              </div>
+              <img src={message.senderPhoto} />
             </div>
           ))}
         </div>
       )}
       {selectedConversationId && (
-        <div className="message-input-container">
+        <div>
           <input
-            type="text"
+            type='text'
             value={newMessage}
             onChange={(event) => setNewMessage(event.target.value)}
-            placeholder="Type a message..."
+            placeholder='Type a message...'
           />
           <button onClick={handleSendMessage}>Send</button>
         </div>
-      )} */}
+      )}
     </div>
   );
 };
