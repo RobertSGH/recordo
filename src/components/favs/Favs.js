@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   collection,
   getFirestore,
@@ -6,11 +6,11 @@ import {
   query,
   where,
   onSnapshot,
+  QuerySnapshot,
+  Timestamp,
 } from 'firebase/firestore';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../../App';
-import classes from './Favs.module.css';
-import { Route, Link } from 'react-router-dom';
 
 const MessagingComponent = (props) => {
   const [conversations, setConversations] = useState([]);
@@ -19,17 +19,23 @@ const MessagingComponent = (props) => {
   const db = getFirestore();
   const [user] = useAuthState(auth);
   const [selectedConversationId, setSelectedConversationId] = useState(null);
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
   async function fetchconversations() {
     try {
       const conversationsReff = collection(db, 'conversations');
-      const q = query(conversationsReff, where('recipient', '==', user?.uid));
+      const q = query(
+        conversationsReff,
+        where('participants', 'array-contains', user?.uid)
+      );
 
       const unsub = onSnapshot(q, (doc) => {
         const updatedConversations = doc.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
+
         setConversations(updatedConversations);
       });
 
@@ -38,12 +44,15 @@ const MessagingComponent = (props) => {
       console.error(error);
     }
   }
-
+  console.log(user);
   const getMessages = async () => {
     try {
+      if (!selectedConversationId) return;
       const messagesRef = collection(db, 'messages');
-      const q = query(messagesRef);
-
+      const q = query(
+        messagesRef,
+        where('conversation', '==', selectedConversationId)
+      );
       const unsub = onSnapshot(q, (doc) => {
         const updatedMessages = doc.docs.map((doc) => ({
           id: doc.id,
@@ -51,7 +60,6 @@ const MessagingComponent = (props) => {
         }));
         setMessages(updatedMessages);
       });
-      console.log(messages);
       return () => unsub();
     } catch (error) {
       console.error(error);
@@ -74,10 +82,71 @@ const MessagingComponent = (props) => {
 
   function handleSelectConversation(conversationId) {
     setSelectedConversationId(conversationId);
+    getMessages();
   }
+
+  useEffect(() => {
+    if (selectedConversationId) getMessages();
+  }, [selectedConversationId]);
+
+  const handleSearch = async () => {
+    try {
+      const q = query(
+        collection(db, 'users'),
+        where('displayName', '==', searchQuery)
+      );
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        setSearchResults(
+          querySnapshot.docs.map((doc) => ({
+            recipientId: doc.id,
+            ...doc.data(),
+          }))
+        );
+      });
+
+      console.log(searchResults);
+      return () => unsubscribe();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const startConversation = async (recipientId, displayName) => {
+    try {
+      const conversationsRef = collection(db, 'conversations');
+
+      await addDoc(conversationsRef, {
+        participants: [user.uid, recipientId],
+        recipientName: displayName,
+        senderName: user.displayName,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div>
+      <div>
+        <input
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <button onClick={handleSearch}>Search</button>
+        {searchResults.map((user) => (
+          <div key={user.recipientId}>
+            <img src={user.photoURL} alt={user.displayName} />
+            <p>{user.displayName}</p>
+            <button
+              onClick={() =>
+                startConversation(user.recipientId, user.displayName)
+              }
+            >
+              Start conversation
+            </button>
+          </div>
+        ))}
+      </div>
       <div>
         <label onClick={fetchconversations}>Conversations</label>
         {conversations.map((conversation) => (
@@ -89,14 +158,14 @@ const MessagingComponent = (props) => {
               <img src={conversation.photoUrl} alt={conversation.name} />
               <div>
                 <h4>{conversation.senderName}</h4>
-                <p>{conversation.latestMessage}</p>
+                <h4>{conversation.recipientName}</h4>
               </div>
             </div>
           </div>
         ))}
       </div>
       {selectedConversationId && (
-        <div className={classes.messages}>
+        <div>
           {messages.map((message) => (
             <div key={message.id}>
               <p>{message.message}</p>
