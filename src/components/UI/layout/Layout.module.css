@@ -1,15 +1,15 @@
 .layout {
-  border: 3px solid green;
+  /* border: 3px solid green; */
   display: flex;
 }
 
 .left {
-  border: 3px solid rgb(128, 0, 0);
+  /* border: 3px solid rgb(128, 0, 0); */
   width: 40%;
 }
 
 .main {
-  border: 3px solid rgb(128, 0, 0);
+  /* border: 3px solid rgb(128, 0, 0); */
   padding: 50px;
   margin-left: 0;
   display: flex;

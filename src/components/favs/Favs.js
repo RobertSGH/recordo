@@ -44,7 +44,27 @@ const MessagingComponent = (props) => {
       console.error(error);
     }
   }
-  console.log(user);
+
+  const handleSearch = async () => {
+    try {
+      const q = query(
+        collection(db, 'users'),
+        where('displayName', '==', searchQuery)
+      );
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        setSearchResults(
+          querySnapshot.docs.map((doc) => ({
+            recipientId: doc.id,
+            ...doc.data(),
+          }))
+        );
+      });
+      return () => unsubscribe();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const getMessages = async () => {
     try {
       if (!selectedConversationId) return;
@@ -88,28 +108,6 @@ const MessagingComponent = (props) => {
   useEffect(() => {
     if (selectedConversationId) getMessages();
   }, [selectedConversationId]);
-
-  const handleSearch = async () => {
-    try {
-      const q = query(
-        collection(db, 'users'),
-        where('displayName', '==', searchQuery)
-      );
-      const unsubscribe = onSnapshot(q, (querySnapshot) => {
-        setSearchResults(
-          querySnapshot.docs.map((doc) => ({
-            recipientId: doc.id,
-            ...doc.data(),
-          }))
-        );
-      });
-
-      console.log(searchResults);
-      return () => unsubscribe();
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const startConversation = async (recipientId, displayName) => {
     try {

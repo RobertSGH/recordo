@@ -5,20 +5,23 @@ import AddPost from '../../feed/AddPost';
 import { Login } from './Login';
 import PostList from '../../feed/PostList';
 import ChatMessaging from '../../favs/Favs';
+import { BrowserRouter, Route } from 'react-router-dom';
 
 const Layout = (props) => {
   return (
-    <Fragment>
-      <Header />
-      <Login />
-      <div className={classes.layout}>
-        <div className={classes.left}>{<ChatMessaging />}</div>
-        <div className={classes.main}>
-          <AddPost />
-          <PostList />
+    <BrowserRouter>
+      <Fragment>
+        <Header />
+        <Login />
+        <div className={classes.layout}>
+          <div className={classes.left}>{<ChatMessaging />}</div>
+          <div className={classes.main}>
+            <AddPost />
+            <PostList />
+          </div>
         </div>
-      </div>
-    </Fragment>
+      </Fragment>
+    </BrowserRouter>
   );
 };
 
