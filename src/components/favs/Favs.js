@@ -36,6 +36,8 @@ const MessagingComponent = (props) => {
           ...doc.data(),
         }));
 
+        console.log(updatedConversations);
+
         setConversations(updatedConversations);
       });
 
@@ -64,6 +66,15 @@ const MessagingComponent = (props) => {
       console.error(error);
     }
   };
+
+  function handleSelectConversation(conversationId) {
+    setSelectedConversationId(conversationId);
+    getMessages();
+  }
+
+  useEffect(() => {
+    if (selectedConversationId) getMessages();
+  }, [selectedConversationId]);
 
   const getMessages = async () => {
     try {
@@ -100,15 +111,6 @@ const MessagingComponent = (props) => {
     setNewMessage('');
   };
 
-  function handleSelectConversation(conversationId) {
-    setSelectedConversationId(conversationId);
-    getMessages();
-  }
-
-  useEffect(() => {
-    if (selectedConversationId) getMessages();
-  }, [selectedConversationId]);
-
   const startConversation = async (recipientId, displayName) => {
     try {
       const conversationsRef = collection(db, 'conversations');
@@ -122,6 +124,8 @@ const MessagingComponent = (props) => {
       console.error(error);
     }
   };
+
+  console.log(user);
 
   return (
     <div>
@@ -155,8 +159,11 @@ const MessagingComponent = (props) => {
             <div onClick={getMessages}>
               <img src={conversation.photoUrl} alt={conversation.name} />
               <div>
-                <h4>{conversation.senderName}</h4>
-                <h4>{conversation.recipientName}</h4>
+                <h4>
+                  {conversation.recipientName === user.displayName
+                    ? conversation.senderName
+                    : conversation.recipientName}
+                </h4>
               </div>
             </div>
           </div>
