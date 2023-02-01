@@ -125,8 +125,6 @@ const MessagingComponent = (props) => {
     }
   };
 
-  console.log(user);
-
   return (
     <div>
       <div>
