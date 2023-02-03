@@ -21,6 +21,7 @@ import {
   getDoc,
   setDoc,
 } from 'firebase/firestore';
+import logo from './Recordo-Logo.png';
 
 export const Login = () => {
   const auth = getAuth();
@@ -62,6 +63,9 @@ export const Login = () => {
 
   return (
     <div className={classes.login}>
+      <a href='/' className={classes.logo}>
+        <img src={logo} alt='Logo' />
+      </a>
       {!user ? (
         <button className={classes.button} onClick={signInWithGoogle}>
           Sign in with Google
@@ -76,8 +80,8 @@ export const Login = () => {
       ) : (
         ''
       )}
-      <p>{user?.displayName || user?.uid}</p>
       <div className={classes.items}>
+        <p>{user?.displayName || user?.uid}</p>
         {siggnedIn && <img src={user?.photoURL} alt='imglogo' />}
         {user && (
           <button className={classes.button} onClick={signUserOut}>

@@ -4,7 +4,7 @@ import classes from './Layout.module.css';
 import AddPost from '../../feed/AddPost';
 import { Login } from './Login';
 import PostList from '../../feed/PostList';
-import ChatMessaging from '../../favs/Favs';
+import MessagingComponent from '../../favs/Favs';
 import { BrowserRouter, Route } from 'react-router-dom';
 
 const Layout = (props) => {
@@ -14,7 +14,7 @@ const Layout = (props) => {
         <Header />
         <Login />
         <div className={classes.layout}>
-          <div className={classes.left}>{<ChatMessaging />}</div>
+          <div className={classes.left}>{<MessagingComponent />}</div>
           <div className={classes.main}>
             <AddPost />
             <PostList />
