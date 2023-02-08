@@ -8,20 +8,10 @@ import {
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { signOut } from 'firebase/auth';
 import classes from './Login.module.css';
-import { useState, useEffect } from 'react';
-import {
-  collection,
-  getFirestore,
-  addDoc,
-  query,
-  where,
-  onSnapshot,
-  getDocs,
-  doc,
-  getDoc,
-  setDoc,
-} from 'firebase/firestore';
+import { useState } from 'react';
+import { getFirestore, doc, setDoc } from 'firebase/firestore';
 import logo from './Recordo-Logo.png';
+import { Link } from 'react-router-dom';
 
 export const Login = () => {
   const auth = getAuth();
@@ -63,9 +53,9 @@ export const Login = () => {
 
   return (
     <div className={classes.login}>
-      <a href='/' className={classes.logo}>
+      <Link to='/' className={classes.logo}>
         <img src={logo} alt='Logo' />
-      </a>
+      </Link>
       {!user ? (
         <button className={classes.button} onClick={signInWithGoogle}>
           Sign in with Google
