@@ -11,8 +11,12 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { addDoc, collection } from 'firebase/firestore';
-import { getFirestore } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  getFirestore,
+  Timestamp,
+} from 'firebase/firestore';
 import { useEffect } from 'react';
 
 const AddPost = (props) => {
@@ -45,7 +49,7 @@ const AddPost = (props) => {
     text: yup.string().required('Text is required'),
   });
 
-  const { register, handleSubmit } = useForm({
+  const { register, handleSubmit, errors } = useForm({
     resolver: yupResolver(schema),
   });
 
@@ -90,6 +94,7 @@ const AddPost = (props) => {
       username: user?.displayName,
       userId: user?.uid,
       fileurl: fileUrl,
+      date: Timestamp.fromDate(new Date()),
     });
     formRef.current.reset();
     fileInputRef.current.value = null;
@@ -122,6 +127,7 @@ const AddPost = (props) => {
               rows='5'
               {...register('text')}
             ></textarea>
+            {errors && errors.text && <p>{errors.text.message}</p>}
           </div>
           {uploadTask && (
             <div>

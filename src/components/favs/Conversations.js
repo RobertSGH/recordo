@@ -6,6 +6,7 @@ import {
   query,
   where,
   onSnapshot,
+  Timestamp,
 } from 'firebase/firestore';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../../App';
@@ -65,10 +66,11 @@ const Conversations = () => {
         where('conversation', '==', selectedConversationId)
       );
       const unsub = onSnapshot(q, (doc) => {
-        const updatedMessages = doc.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
+        const updatedMessages = doc.docs.map((doc) => {
+          let data = { id: doc.id, ...doc.data() };
+          data.date = data.date.toDate();
+          return data;
+        });
         setMessages(updatedMessages);
       });
       return () => unsub();
@@ -86,17 +88,18 @@ const Conversations = () => {
       userId: user?.uid,
       senderName: user?.displayName,
       senderPhoto: user?.photoURL,
+      date: Timestamp.fromDate(new Date()),
     });
 
     setNewMessage('');
   };
 
   return (
-    <div>
+    <div className={classes.container}>
       <Link to='/' className={classes.logo}>
         <img src={logo} alt='Logo' />
       </Link>
-      <div>
+      <div className={classes.conversations}>
         {conversations.map((conversation) => (
           <Link key={conversation.id} to={`/conversations/${conversation.id}`}>
             <div onClick={() => handleSelectConversation(conversation.id)}>
@@ -111,12 +114,15 @@ const Conversations = () => {
             </div>
           </Link>
         ))}
+      </div>
+      <div className={classes.messagescontainer}>
         {selectedConversationId && (
           <div>
             {messages.map((message) => (
-              <div key={message.id}>
+              <div className={classes.messages} key={message.id}>
                 <p>{message.message}</p>
                 <img src={message.senderPhoto} />
+                <p>{message.date.toLocaleString()}</p>
               </div>
             ))}
           </div>

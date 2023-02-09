@@ -14,10 +14,10 @@ const Layout = (props) => {
       <Login />
       <div className={classes.layout}>
         <div className={classes.left}>
+          <MessagingComponent />
           <Link to='/conversations'>
             <p>Conversations</p>
           </Link>
-          <MessagingComponent />
         </div>
         <div className={classes.main}>
           <AddPost />

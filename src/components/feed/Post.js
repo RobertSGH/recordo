@@ -21,6 +21,7 @@ export const Post = (props) => {
   const [likes, setLikes] = useState(null);
   const likesRef = collection(db, 'likes');
   const likesDoc = query(likesRef, where('postId', '==', post.id));
+  const timestamp = new Date(post.date.seconds * 1000);
 
   useEffect(() => {
     const unsub = onSnapshot(likesDoc, (querySnapshot) => {
@@ -93,18 +94,20 @@ export const Post = (props) => {
       );
     }
   }
+
   return (
     <div className={classes.postcontainer}>
       <div className={classes.items}>
         <p>{post.text}</p>
         <div>{element}</div>
-        <p>@{post.username}</p>
         {user && (
           <button onClick={hasUserLiked ? removeLike : addLike}>
             {hasUserLiked ? <>&#128078;</> : <>&#128077;</>}
           </button>
         )}
         {likes && <p>Likes: {likes?.length}</p>}
+        <p>@{post.username}</p>
+        <p>{timestamp.toLocaleString()}</p>
       </div>
     </div>
   );

@@ -5,3 +5,28 @@
   object-fit: cover;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.conversations {
+  display: flex;
+  flex-direction: column;
+  margin-right: 70%;
+}
+
+.messagescontainer {
+  align-self: center;
+  margin-top: -12%;
+}
+
+.messages {
+  display: flex;
+  flex-direction: row;
+}
+
+/* .messages img{
+
+} */

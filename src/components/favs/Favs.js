@@ -59,6 +59,7 @@ const MessagingComponent = (props) => {
     <div>
       <input
         value={searchQuery}
+        placeholder='Find friends!'
         onChange={(e) => setSearchQuery(e.target.value)}
       />
       <button onClick={handleSearch}>Search</button>
