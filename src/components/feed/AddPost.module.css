@@ -1,8 +1,10 @@
+.postcontainer {
+  display: flex;
+}
+
 .form {
-  position: relative;
-  margin: auto;
-  align-items: center;
-  align-content: center;
+  position: flex;
+  flex-direction: column;
 }
 
 .control {
