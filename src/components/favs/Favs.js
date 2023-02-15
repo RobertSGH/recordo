@@ -39,7 +39,13 @@ const MessagingComponent = (props) => {
     }
   };
 
-  const startConversation = async (recipientId, displayName) => {
+  console.log(searchResults);
+
+  const startConversation = async (
+    recipientId,
+    displayName,
+    recipientPhoto
+  ) => {
     try {
       const conversationsRef = collection(db, 'conversations');
 
@@ -47,9 +53,11 @@ const MessagingComponent = (props) => {
         participants: [user.uid, recipientId],
         recipientName: displayName,
         senderName: user.displayName,
+        senderPhoto: user?.photoURL,
+        recipientPhoto: recipientPhoto,
       });
 
-      navigate('/conversations');
+      navigate('/conversations/');
     } catch (error) {
       console.error(error);
     }
@@ -69,7 +77,11 @@ const MessagingComponent = (props) => {
           <p>{user.displayName}</p>
           <button
             onClick={() =>
-              startConversation(user.recipientId, user.displayName)
+              startConversation(
+                user.recipientId,
+                user.displayName,
+                user.photoURL
+              )
             }
           >
             Start conversation

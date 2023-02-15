@@ -7,11 +7,11 @@ import {
   where,
   onSnapshot,
   Timestamp,
+  orderBy,
 } from 'firebase/firestore';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../../App';
 import { Link, useParams } from 'react-router-dom';
-import logo from '../UI/layout/Recordo-Logo.png';
 import classes from './Conversations.module.css';
 
 const Conversations = () => {
@@ -30,7 +30,7 @@ const Conversations = () => {
       const conversationsReff = collection(db, 'conversations');
       const q = query(
         conversationsReff,
-        where('participants', 'array-contains', user?.uid)
+        where('participants', 'array-contains', user?.uid || null)
       );
 
       const unsub = onSnapshot(q, (doc) => {
@@ -63,7 +63,8 @@ const Conversations = () => {
       const messagesRef = collection(db, 'messages');
       const q = query(
         messagesRef,
-        where('conversation', '==', selectedConversationId)
+        where('conversation', '==', selectedConversationId),
+        orderBy('date', 'asc')
       );
       const unsub = onSnapshot(q, (doc) => {
         const updatedMessages = doc.docs.map((doc) => {
@@ -94,41 +95,73 @@ const Conversations = () => {
     setNewMessage('');
   };
 
+  const selectedConversation = conversations.find(
+    (conversation) => conversation.id === selectedConversationId
+  );
+  const recipientName =
+    selectedConversation?.recipientName === user?.displayName
+      ? selectedConversation?.senderName
+      : selectedConversation?.recipientName;
+
+  const handleFetchConversations = () => {
+    fetchconversations();
+  };
+
+  console.log(conversations);
+
   return (
     <div className={classes.container}>
-      <Link to='/' className={classes.logo}>
-        <img src={logo} alt='Logo' />
-      </Link>
       <div className={classes.conversations}>
-        {conversations.map((conversation) => (
-          <Link key={conversation.id} to={`/conversations/${conversation.id}`}>
-            <div onClick={() => handleSelectConversation(conversation.id)}>
-              <img src={conversation.photoUrl} alt={conversation.name} />
-              <div>
+        <button onClick={handleFetchConversations}>Load Conversations</button>
+        <ul>
+          {conversations.map((conversation) => (
+            <li key={conversation.id}>
+              <Link
+                to={`/conversations/${conversation.id}`}
+                className={
+                  conversation.id === selectedConversationId
+                    ? classes.selected
+                    : ''
+                }
+                onClick={() => handleSelectConversation(conversation.id)}
+              >
+                <img
+                  src={
+                    conversation.senderPhoto === user?.photoURL
+                      ? conversation.recipientPhoto
+                      : conversation.senderPhoto
+                  }
+                  alt={conversation.name}
+                />
                 <h4>
-                  {conversation.recipientName === user.displayName
+                  {conversation.recipientName === user?.displayName
                     ? conversation.senderName
                     : conversation.recipientName}
                 </h4>
-              </div>
-            </div>
-          </Link>
-        ))}
+              </Link>
+            </li>
+          ))}
+        </ul>
       </div>
       <div className={classes.messagescontainer}>
+        <div className={classes.recipientName}>
+          {selectedConversation && <div>{recipientName}</div>}
+        </div>
         {selectedConversationId && (
           <div>
             {messages.map((message) => (
               <div className={classes.messages} key={message.id}>
                 <p>{message.message}</p>
-                <img src={message.senderPhoto} />
-                <p>{message.date.toLocaleString()}</p>
+                <div className={classes.messageuser}>
+                  <img src={message.senderPhoto} alt="Sender's photo" />
+                  <p>{message.date.toLocaleString()}</p>
+                </div>
               </div>
             ))}
           </div>
         )}
         {selectedConversationId && (
-          <div>
+          <div className={classes.messageInput}>
             <input
               type='text'
               value={newMessage}

@@ -1,5 +1,4 @@
 import { Fragment } from 'react';
-import Header from './Header';
 import classes from './Layout.module.css';
 import AddPost from '../../feed/AddPost';
 import { Login } from './Login';
@@ -10,7 +9,6 @@ import { Link } from 'react-router-dom';
 const Layout = (props) => {
   return (
     <Fragment>
-      <Header />
       <Login />
       <div className={classes.layout}>
         <div className={classes.left}>

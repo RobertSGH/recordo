@@ -153,14 +153,18 @@ const AddPost = (props) => {
               rows='5'
               {...register('text')}
             ></textarea>
-            <CategorySelection
-              selectedCategories={selectedCategories}
-              onCategoryChange={handleCategoryChange}
-            />
-            <p style={{ color: 'red' }}>
-              {' '}
-              {errors.text?.message || errors.selectedCategories?.message}
-            </p>
+            {loggedIn && (
+              <CategorySelection
+                selectedCategories={selectedCategories}
+                onCategoryChange={handleCategoryChange}
+              />
+            )}
+            {loggedIn && (
+              <p style={{ color: 'red' }}>
+                {' '}
+                {errors.text?.message || errors.selectedCategories?.message}
+              </p>
+            )}
           </div>
           {uploadTask && (
             <div>
@@ -171,10 +175,8 @@ const AddPost = (props) => {
               <button onClick={onCancelUpload}>Cancel</button>
             </div>
           )}
-          <div>
-            {loggedIn ? postcontent : <p>Please log in to begin.</p>}
-            {loggedIn && <button>Post</button>}
-          </div>
+          {loggedIn ? postcontent : <p>Please log in to begin.</p>}
+          {loggedIn && <button>Post</button>}
         </form>
       </Card>
     </div>

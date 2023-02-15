@@ -14,6 +14,11 @@
   padding: 1rem;
 }
 
+.items img {
+  display: block;
+  padding: 2rem;
+}
+
 .logo img {
   border-radius: 50%;
   width: 100px;

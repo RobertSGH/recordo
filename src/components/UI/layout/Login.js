@@ -29,9 +29,7 @@ export const Login = () => {
 
   const signInWithGoogle = async () => {
     await signInWithPopup(auth, provider);
-
     setSiggnedIn(true);
-
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       try {
         await setDoc(doc(db, 'users', user.uid), {
