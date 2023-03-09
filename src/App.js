@@ -5,7 +5,8 @@ import { getDatabase } from 'firebase/database';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Conversations from './components/favs/Conversations';
-import Header from './components/UI/layout/Header';
+import { Login } from './components/UI/layout/Login';
+import classes from './App.module.css';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBNogwN8AELoHzMzvjK78eihuzOls0kx38',
@@ -25,17 +26,19 @@ export const provider = new GoogleAuthProvider();
 
 function App() {
   return (
-    <Router>
-      <Header />
-      <Routes>
-        <Route exact path='*' element={<Layout />} />
-        <Route path='/conversations' element={<Conversations />} />
-        <Route
-          path='/conversations/:conversationId'
-          element={<Conversations />}
-        />
-      </Routes>
-    </Router>
+    <div className={classes.container}>
+      <Router>
+        <Login />
+        <Routes>
+          <Route exact path='*' element={<Layout />} />
+          <Route path='/conversations' element={<Conversations />} />
+          <Route
+            path='/conversations/:conversationId'
+            element={<Conversations />}
+          />
+        </Routes>
+      </Router>
+    </div>
   );
 }
 

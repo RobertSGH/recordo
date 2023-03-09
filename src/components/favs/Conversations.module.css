@@ -7,21 +7,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
-}
-
-.messagescontainer {
-  flex: 2;
-  display: flex;
-  flex-direction: column;
-  padding: 1rem;
-}
-
-.conversations {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .conversations ul {
@@ -38,52 +24,86 @@
 .conversations img {
   width: 40px;
   height: 40px;
-  margin-right: 1rem;
+  margin: 0 10px;
   border-radius: 50%;
 }
 
 .conversations h4 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   margin: 0;
+  margin-right: 10px;
 }
 
 .conversations a {
+  display: flex;
   text-decoration: none;
   color: black;
 }
 
 .conversations a:hover {
-  background-color: #eee;
+  background-color: #f264ff;
+  border-radius: 8px;
 }
 
 .conversations a.selected {
-  background-color: #ccc;
+  background-color: #f264ff;
+  border-radius: 8px;
 }
 
 .messagescontainer {
   flex: 2;
-  display: grid;
-  grid-template-rows: 1fr auto;
+  display: flex;
+  flex-direction: column;
+  margin-right: 10rem;
   padding: 1rem;
 }
 
-.message-input {
-  grid-row: 2;
+.messagescontainer ul {
+  list-style: none;
+  padding: 0;
+}
+
+.messagescontainer li {
   display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
-.message-input input {
-  flex: 1;
-  border: none;
-  border-radius: 4px;
-  padding: 0.5rem;
-  margin-right: 0.5rem;
+.messagescontainer h5 {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
-.message-input button {
-  border: none;
-  border-radius: 4px;
-  background-color: #2e9cca;
-  color: white;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
+.messagescontainer h3 {
+  text-align: center;
+}
+
+.messagescontainer img {
+  width: 40px;
+  height: 40px;
+  margin: 0 10px;
+  border-radius: 50%;
+}
+
+.messageInput {
+  display: flex;
+  flex-direction: row;
+}
+
+.messageInput input {
+  font: inherit;
+  border-radius: 5px;
+  background-color: #f0f0f0dd;
+  border: 1px solid #c1d1d1;
+  display: block;
+  font-size: 1.25rem;
+  resize: none;
+}
+
+.messageInput input:focus {
+  background-color: #f8cbf1;
+  outline-color: rgb(81, 0, 128);
 }

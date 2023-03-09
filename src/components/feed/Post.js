@@ -13,6 +13,7 @@ import classes from './Post.module.css';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../../App';
 import { useEffect, useState } from 'react';
+import useMessaging from '../favs/UseMessaging';
 
 export const Post = (props) => {
   const { post } = props;
@@ -22,6 +23,7 @@ export const Post = (props) => {
   const likesRef = collection(db, 'likes');
   const likesDoc = query(likesRef, where('postId', '==', post.id));
   const timestamp = new Date(post.date.seconds * 1000);
+  const { startConversation } = useMessaging();
 
   useEffect(() => {
     const unsub = onSnapshot(likesDoc, (querySnapshot) => {
@@ -80,7 +82,7 @@ export const Post = (props) => {
       element = (
         <img
           src={post.fileurl}
-          onClick={() => window.location.assign(post.fileurl)}
+          onClick={() => window.open(post.fileurl, '_blank')}
         />
       );
     } else {
@@ -89,7 +91,7 @@ export const Post = (props) => {
           src={post.fileurl}
           controls
           type='video/mp4'
-          onClick={() => window.location.assign(post.fileurl)}
+          onClick={() => window.open(post.fileurl, '_blank')}
         />
       );
     }
@@ -98,7 +100,7 @@ export const Post = (props) => {
   return (
     <div className={classes.postcontainer}>
       <div className={classes.items}>
-        <p>{post.text}</p>
+        <h3>{post.text}</h3>
         <div>{element}</div>
         {user && (
           <button onClick={hasUserLiked ? removeLike : addLike}>
@@ -106,7 +108,9 @@ export const Post = (props) => {
           </button>
         )}
         {likes && <p>Likes: {likes?.length}</p>}
-        <p>@{post.username}</p>
+        <h4 onClick={() => startConversation(user?.uid, post.username, '')}>
+          @{post.username}
+        </h4>
         <p>{timestamp.toLocaleString()}</p>
       </div>
     </div>

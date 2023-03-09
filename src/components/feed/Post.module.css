@@ -21,5 +21,10 @@ video {
   width: 5rem;
 }
 
-/* .items {
-} */
+.postcontainer h4 {
+  cursor: pointer;
+  color: rgb(44, 75, 188);
+}
+.postcontainer h4:hover {
+  text-decoration: underline;
+}

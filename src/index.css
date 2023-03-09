@@ -1,11 +1,10 @@
-/* @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap'); */
-
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
 * {
   box-sizing: border-box;
 }
 
 html {
-  font-family: 'Noto Sans JP', sans-serif;
+  font-family: 'Quicksand', sans-serif;
 }
 
 body {
@@ -19,18 +18,19 @@ body {
   );
 }
 
-/* button {
+button {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  color: black;
+  background-color: #e562e3;
+  padding: 5px 7px;
+  border: none;
+  border-radius: 12px;
   cursor: pointer;
-  background-color: #7a0144;
-  border: 1px solid #7a0144;
-  border-radius: 10px;
-  padding: 0.4rem 0.1rem;
-  color: white;
-  font-size: 0.6rem;
+  transition: background-color 0.3s ease;
 }
 
-button:hover,
-button:active {
-  background-color: #9c095a;
-  border-color: #9c095a;
-} */
+button:hover {
+  background-color: #b310b9;
+}

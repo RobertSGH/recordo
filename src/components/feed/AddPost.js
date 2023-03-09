@@ -18,14 +18,12 @@ import {
   Timestamp,
 } from 'firebase/firestore';
 import { useEffect } from 'react';
-import CategorySelection from './CategorySelection';
 
 const AddPost = (props) => {
   const [loggedIn, setLoggedin] = useState(false);
   const [fileUrl, setFileUrl] = useState(null);
   const [uploadTask, setUploadTask] = useState(null);
   const [progress, setProgress] = useState(0);
-  const [selectedCategories, setSelectedCategories] = useState([]);
   const auth = getAuth();
   const user = auth.currentUser;
   const db = getFirestore();
@@ -50,10 +48,6 @@ const AddPost = (props) => {
 
   const schema = yup.object().shape({
     text: yup.string().required('Input needed'),
-    selectedCategories: yup
-      .array()
-      .required('At least one category must be selected')
-      .min(1),
   });
 
   const {
@@ -104,38 +98,27 @@ const AddPost = (props) => {
       userId: user?.uid,
       fileurl: fileUrl,
       date: Timestamp.fromDate(new Date()),
-      selectedCategories: selectedCategories,
     });
     formRef.current.reset();
     fileInputRef.current.value = null;
     setProgress(0);
-    setSelectedCategories([]);
+    setFileUrl(null);
+    setUploadTask(null);
   };
 
   let postcontent = (
-    <input
-      type='file'
-      id='file'
-      name='file'
-      onChange={onFileChange}
-      ref={fileInputRef}
-    />
+    <label htmlFor='inputTag'>
+      Select File
+      <input
+        type='file'
+        id='inputTag'
+        name='file'
+        onChange={onFileChange}
+        ref={fileInputRef}
+        className={classes.customInput}
+      />
+    </label>
   );
-
-  const handleCategoryChange = (event) => {
-    const selectedValue = event.target.value;
-    let newSelectedCategories;
-
-    if (selectedCategories.includes(selectedValue)) {
-      newSelectedCategories = selectedCategories.filter(
-        (category) => category !== selectedValue
-      );
-    } else {
-      newSelectedCategories = [...selectedCategories, selectedValue];
-    }
-
-    setSelectedCategories(newSelectedCategories);
-  };
 
   return (
     <div className={classes.postcontainer}>
@@ -154,12 +137,6 @@ const AddPost = (props) => {
               {...register('text')}
             ></textarea>
             {loggedIn && (
-              <CategorySelection
-                selectedCategories={selectedCategories}
-                onCategoryChange={handleCategoryChange}
-              />
-            )}
-            {loggedIn && (
               <p style={{ color: 'red' }}>
                 {' '}
                 {errors.text?.message || errors.selectedCategories?.message}
@@ -176,7 +153,7 @@ const AddPost = (props) => {
             </div>
           )}
           {loggedIn ? postcontent : <p>Please log in to begin.</p>}
-          {loggedIn && <button>Post</button>}
+          {loggedIn && <button className={classes.customButton}>Post</button>}
         </form>
       </Card>
     </div>

@@ -2,22 +2,18 @@ import React, { useState } from 'react';
 import {
   collection,
   getFirestore,
-  addDoc,
   query,
   where,
   onSnapshot,
 } from 'firebase/firestore';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '../../App';
-import { useNavigate } from 'react-router-dom';
+import classes from './Favs.module.css';
+import useMessaging from './UseMessaging';
 
 const MessagingComponent = (props) => {
   const db = getFirestore();
-  const [user] = useAuthState(auth);
   const [searchResults, setSearchResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-
-  const navigate = useNavigate();
+  const { startConversation } = useMessaging();
 
   const handleSearch = async () => {
     try {
@@ -39,57 +35,36 @@ const MessagingComponent = (props) => {
     }
   };
 
-  console.log(searchResults);
-
-  const startConversation = async (
-    recipientId,
-    displayName,
-    recipientPhoto
-  ) => {
-    try {
-      const conversationsRef = collection(db, 'conversations');
-
-      await addDoc(conversationsRef, {
-        participants: [user.uid, recipientId],
-        recipientName: displayName,
-        senderName: user.displayName,
-        senderPhoto: user?.photoURL,
-        recipientPhoto: recipientPhoto,
-      });
-
-      navigate('/conversations/');
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   return (
-    <div>
-      <input
-        value={searchQuery}
-        placeholder='Find friends!'
-        onChange={(e) => setSearchQuery(e.target.value)}
-      />
-      <button onClick={handleSearch}>Search</button>
-      {searchResults.map((user) => (
-        <div key={user.recipientId}>
-          <img src={user.photoURL} alt={user.displayName} />
-          <p>{user.displayName}</p>
-          <button
-            onClick={() =>
-              startConversation(
-                user.recipientId,
-                user.displayName,
-                user.photoURL
-              )
-            }
-          >
-            Start conversation
-          </button>
-        </div>
-      ))}
+    <div className={classes.container}>
+      <div className={classes.search}>
+        <input
+          value={searchQuery}
+          placeholder='Find friends!'
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <button onClick={handleSearch}>Search</button>
+      </div>
+      <ul>
+        {searchResults.map((user) => (
+          <li className={classes.results} key={user.recipientId}>
+            <img src={user.photoURL} alt={user.displayName} />
+            <p>{user.displayName}</p>
+            <button
+              onClick={() =>
+                startConversation(
+                  user.recipientId,
+                  user.displayName,
+                  user.photoURL
+                )
+              }
+            >
+              Start conversation
+            </button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
-
 export default MessagingComponent;

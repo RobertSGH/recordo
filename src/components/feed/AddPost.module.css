@@ -3,12 +3,12 @@
 }
 
 .form {
-  position: flex;
+  display: flex;
   flex-direction: column;
 }
 
-.control {
-  margin-bottom: 0.5rem;
+.control p {
+  margin: 5px 0;
 }
 
 .control label {
@@ -22,11 +22,12 @@
   font: inherit;
   padding: 0.35rem;
   border-radius: 4px;
-  background-color: #f0f0f0;
+  background-color: #f0f0f0dd;
   border: 1px solid #c1d1d1;
   display: block;
   width: 100%;
   font-size: 1.25rem;
+  resize: none;
 }
 
 .control input:focus,
@@ -46,7 +47,26 @@
   height: 20px;
   display: block;
   background-color: #7a0144;
-
   border-radius: 4px;
   transition: width 0.2s ease;
+}
+
+.customInput {
+  display: none;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  gap: 10px;
+  width: 45%;
+  margin-top: 3px;
+  margin-bottom: 0.2rem;
+  font-size: 1rem;
+}
+
+.customButton {
+  margin-top: 5px;
+  width: 30%;
 }

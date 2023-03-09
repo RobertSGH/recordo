@@ -8,10 +8,17 @@ import {
   onSnapshot,
   Timestamp,
   orderBy,
+  doc,
+  updateDoc,
 } from 'firebase/firestore';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../../App';
-import { Link, useParams } from 'react-router-dom';
+import {
+  Link,
+  useParams,
+  useLocation,
+  URLSearchParamsInit,
+} from 'react-router-dom';
 import classes from './Conversations.module.css';
 
 const Conversations = () => {
@@ -30,7 +37,8 @@ const Conversations = () => {
       const conversationsReff = collection(db, 'conversations');
       const q = query(
         conversationsReff,
-        where('participants', 'array-contains', user?.uid || null)
+        where('participants', 'array-contains', user?.uid || null),
+        where('hasMessages', '==', true)
       );
 
       const unsub = onSnapshot(q, (doc) => {
@@ -48,8 +56,13 @@ const Conversations = () => {
   }
 
   function handleSelectConversation(conversationId) {
-    setSelectedConversationId(conversationId);
-    getMessages();
+    const selectedConversation = conversations.find(
+      (conversation) => conversation.id === conversationId
+    );
+    if (selectedConversation.hasMessages) {
+      setSelectedConversationId(conversationId);
+      getMessages();
+    }
   }
 
   useEffect(() => {
@@ -93,6 +106,8 @@ const Conversations = () => {
     });
 
     setNewMessage('');
+    const conversationRef = doc(db, 'conversations', selectedConversationId);
+    await updateDoc(conversationRef, { hasMessages: true });
   };
 
   const selectedConversation = conversations.find(
@@ -107,7 +122,9 @@ const Conversations = () => {
     fetchconversations();
   };
 
-  console.log(conversations);
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const displayName = searchParams.get('displayName');
 
   return (
     <div className={classes.container}>
@@ -144,31 +161,30 @@ const Conversations = () => {
         </ul>
       </div>
       <div className={classes.messagescontainer}>
-        <div className={classes.recipientName}>
-          {selectedConversation && <div>{recipientName}</div>}
-        </div>
+        <div>{selectedConversation && <h3>{recipientName}</h3>}</div>
         {selectedConversationId && (
-          <div>
+          <ul>
             {messages.map((message) => (
-              <div className={classes.messages} key={message.id}>
-                <p>{message.message}</p>
-                <div className={classes.messageuser}>
-                  <img src={message.senderPhoto} alt="Sender's photo" />
-                  <p>{message.date.toLocaleString()}</p>
-                </div>
-              </div>
+              <li key={message.id}>
+                <h5>{message.message}</h5>
+                <img src={message.senderPhoto} alt="Sender's photo" />
+                <p>{message.date.toLocaleString()}</p>
+              </li>
             ))}
-          </div>
+          </ul>
         )}
         {selectedConversationId && (
-          <div className={classes.messageInput}>
-            <input
-              type='text'
-              value={newMessage}
-              onChange={(event) => setNewMessage(event.target.value)}
-              placeholder='Type a message...'
-            />
-            <button onClick={handleSendMessage}>Send</button>
+          <div>
+            <h4>{displayName}</h4>
+            <div className={classes.messageInput}>
+              <input
+                type='text'
+                value={newMessage}
+                onChange={(event) => setNewMessage(event.target.value)}
+                placeholder='Type a message...'
+              />
+              <button onClick={handleSendMessage}>Send</button>
+            </div>
           </div>
         )}
       </div>

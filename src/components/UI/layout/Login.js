@@ -11,13 +11,14 @@ import classes from './Login.module.css';
 import { useState } from 'react';
 import { getFirestore, doc, setDoc } from 'firebase/firestore';
 import logo from './Recordo-Logo.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export const Login = () => {
   const auth = getAuth();
   const [user] = useAuthState(auth);
   const [siggnedIn, setSiggnedIn] = useState(false);
   const db = getFirestore();
+  const navigate = useNavigate();
 
   const signInAsGuest = async () => {
     await signInAnonymously(auth);
@@ -47,6 +48,7 @@ export const Login = () => {
   const signUserOut = async () => {
     await signOut(auth);
     setSiggnedIn(false);
+    navigate('/');
   };
 
   return (
@@ -69,7 +71,7 @@ export const Login = () => {
         ''
       )}
       <div className={classes.items}>
-        <p>{user?.displayName || user?.uid}</p>
+        <h4>{user?.displayName || user?.uid}</h4>
         {siggnedIn && <img src={user?.photoURL} alt='imglogo' />}
         {user && (
           <button className={classes.button} onClick={signUserOut}>
