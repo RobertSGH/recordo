@@ -8,7 +8,7 @@ import {
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { signOut } from 'firebase/auth';
 import classes from './Login.module.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { getFirestore, doc, setDoc } from 'firebase/firestore';
 import logo from './Recordo-Logo.png';
 import { Link, useNavigate } from 'react-router-dom';
@@ -51,25 +51,37 @@ export const Login = () => {
     navigate('/');
   };
 
+  useEffect(() => {
+    if (user) {
+      setSiggnedIn(true);
+    } else {
+      setSiggnedIn(false);
+    }
+  }, [user]);
+
   return (
     <div className={classes.login}>
-      <Link to='/' className={classes.logo}>
-        <img src={logo} alt='Logo' />
-      </Link>
-      {!user ? (
-        <button className={classes.button} onClick={signInWithGoogle}>
-          Sign in with Google
-        </button>
-      ) : (
-        ''
-      )}
-      {!user ? (
-        <button className={classes.button} onClick={signInAsGuest}>
-          Continue as guest
-        </button>
-      ) : (
-        ''
-      )}
+      <div className={classes.logoContainer}>
+        <Link to='/' className={classes.logo}>
+          <img src={logo} alt='Logo' />
+        </Link>
+      </div>
+      <div className={classes.actions}>
+        {!user ? (
+          <button className={classes.button} onClick={signInWithGoogle}>
+            Sign in with Google
+          </button>
+        ) : (
+          ''
+        )}
+        {!user ? (
+          <button className={classes.button} onClick={signInAsGuest}>
+            Continue as guest
+          </button>
+        ) : (
+          ''
+        )}
+      </div>
       <div className={classes.items}>
         <h4>{user?.displayName || user?.uid}</h4>
         {siggnedIn && <img src={user?.photoURL} alt='imglogo' />}
@@ -78,7 +90,14 @@ export const Login = () => {
             Sign out
           </button>
         )}
+        {siggnedIn && (
+          <Link to='/conversations'>
+            <button className={classes.button}>Conversations</button>
+          </Link>
+        )}
       </div>
     </div>
   );
 };
+
+export default Login;

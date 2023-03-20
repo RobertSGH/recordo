@@ -20,6 +20,7 @@ import {
   URLSearchParamsInit,
 } from 'react-router-dom';
 import classes from './Conversations.module.css';
+import logo from '../UI/layout/Recordo-Logo.png';
 
 const Conversations = () => {
   const { conversationId } = useParams();
@@ -127,55 +128,67 @@ const Conversations = () => {
   const displayName = searchParams.get('displayName');
 
   return (
-    <div className={classes.container}>
-      <div className={classes.conversations}>
-        <button onClick={handleFetchConversations}>Load Conversations</button>
-        <ul>
-          {conversations.map((conversation) => (
-            <li key={conversation.id}>
-              <Link
-                to={`/conversations/${conversation.id}`}
-                className={
-                  conversation.id === selectedConversationId
-                    ? classes.selected
-                    : ''
-                }
-                onClick={() => handleSelectConversation(conversation.id)}
-              >
-                <img
-                  src={
-                    conversation.senderPhoto === user?.photoURL
-                      ? conversation.recipientPhoto
-                      : conversation.senderPhoto
-                  }
-                  alt={conversation.name}
-                />
-                <h4>
-                  {conversation.recipientName === user?.displayName
-                    ? conversation.senderName
-                    : conversation.recipientName}
-                </h4>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className={classes.messagescontainer}>
-        <div>{selectedConversation && <h3>{recipientName}</h3>}</div>
-        {selectedConversationId && (
+    <div className={classes.messagingPageContainer}>
+      <div className={classes.container}>
+        <div className={classes.conversations}>
+          <Link to='/' className={`${classes.logo}`}>
+            <img className='logo-image' src={logo} alt='Logo' />
+          </Link>
+
           <ul>
-            {messages.map((message) => (
-              <li key={message.id}>
-                <h5>{message.message}</h5>
-                <img src={message.senderPhoto} alt="Sender's photo" />
-                <p>{message.date.toLocaleString()}</p>
+            {conversations.map((conversation) => (
+              <li key={conversation.id}>
+                <Link
+                  to={`/conversations/${conversation.id}`}
+                  className={
+                    conversation.id === selectedConversationId
+                      ? classes.selected
+                      : ''
+                  }
+                  onClick={() => handleSelectConversation(conversation.id)}
+                >
+                  <img
+                    src={
+                      conversation.senderPhoto === user?.photoURL
+                        ? conversation.recipientPhoto
+                        : conversation.senderPhoto
+                    }
+                    alt={conversation.name}
+                  />
+                  <h4>
+                    {conversation.recipientName === user?.displayName
+                      ? conversation.senderName
+                      : conversation.recipientName}
+                  </h4>
+                </Link>
               </li>
             ))}
           </ul>
-        )}
-        {selectedConversationId && (
-          <div>
-            <h4>{displayName}</h4>
+
+          <button onClick={handleFetchConversations}>Load Conversations</button>
+        </div>
+        <div className={classes.messagescontainer}>
+          {selectedConversation && (
+            <div className={classes.messagesHeader}>
+              <h3>{recipientName}</h3>
+            </div>
+          )}
+          <div className={classes.messagesList}>
+            {selectedConversationId && (
+              <ul>
+                {messages.map((message) => (
+                  <li key={message.id}>
+                    <img src={message.senderPhoto} alt="Sender's photo" />
+                    <div>
+                      <h5>{message.message}</h5>
+                      <p>{message.date.toLocaleString()}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          {selectedConversationId && (
             <div className={classes.messageInput}>
               <input
                 type='text'
@@ -185,8 +198,8 @@ const Conversations = () => {
               />
               <button onClick={handleSendMessage}>Send</button>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

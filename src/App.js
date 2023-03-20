@@ -5,7 +5,6 @@ import { getDatabase } from 'firebase/database';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Conversations from './components/favs/Conversations';
-import { Login } from './components/UI/layout/Login';
 import classes from './App.module.css';
 
 const firebaseConfig = {
@@ -28,7 +27,6 @@ function App() {
   return (
     <div className={classes.container}>
       <Router>
-        <Login />
         <Routes>
           <Route exact path='*' element={<Layout />} />
           <Route path='/conversations' element={<Conversations />} />

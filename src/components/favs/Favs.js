@@ -8,6 +8,7 @@ import {
 } from 'firebase/firestore';
 import classes from './Favs.module.css';
 import useMessaging from './UseMessaging';
+import { Link } from 'react-router-dom';
 
 const MessagingComponent = (props) => {
   const db = getFirestore();

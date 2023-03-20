@@ -1,18 +1,63 @@
 .layout {
   display: flex;
+  justify-content: center;
+  height: 100%;
+  position: relative;
 }
 
-.left {
-  width: 40%;
-  padding: 50px 25px;
+.side {
+  position: fixed;
+  display: flex;
+  justify-content: space-between;
+  width: 50%;
+  max-width: 1200px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.left,
+.right {
+  width: 25%;
+  max-width: 240px;
+  height: 100%;
+  z-index: 10;
+}
+
+.center {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  max-width: 600px;
+}
+
+.addPost {
+  position: sticky;
+  top: 0;
+  z-index: 5;
 }
 
 .main {
-  padding: 50px;
-  margin-left: 0;
-  display: flex;
-  flex-direction: column;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.postList {
+  margin-top: 20px;
+}
+
+@media (max-width: 1023px) {
+  .left,
+  .right {
+    max-width: calc(20% - 20px);
+  }
+}
+
+@media (max-width: 768px) {
+  .left,
+  .right {
+    max-width: calc(15% - 20px);
+  }
 }

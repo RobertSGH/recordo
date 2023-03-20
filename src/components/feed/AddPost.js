@@ -121,42 +121,40 @@ const AddPost = (props) => {
   );
 
   return (
-    <div className={classes.postcontainer}>
-      <Card>
-        <form
-          className={classes.form}
-          onSubmit={handleSubmit(onAddPost)}
-          ref={formRef}
-        >
-          <div className={classes.control}>
-            <label htmlFor='text'></label>
-            <textarea
-              placeholder='Start sharing!'
-              id='text'
-              rows='5'
-              {...register('text')}
-            ></textarea>
-            {loggedIn && (
-              <p style={{ color: 'red' }}>
-                {' '}
-                {errors.text?.message || errors.selectedCategories?.message}
-              </p>
-            )}
-          </div>
-          {uploadTask && (
-            <div>
-              <div
-                className={classes.progress}
-                style={{ width: `${progress}%` }}
-              />
-              <button onClick={onCancelUpload}>Cancel</button>
-            </div>
+    <Card>
+      <form
+        className={classes.form}
+        onSubmit={handleSubmit(onAddPost)}
+        ref={formRef}
+      >
+        <div className={classes.control}>
+          <label htmlFor='text'></label>
+          <textarea
+            placeholder='Start sharing!'
+            id='text'
+            rows='5'
+            {...register('text')}
+          ></textarea>
+          {loggedIn && (
+            <p style={{ color: 'red' }}>
+              {' '}
+              {errors.text?.message || errors.selectedCategories?.message}
+            </p>
           )}
-          {loggedIn ? postcontent : <p>Please log in to begin.</p>}
-          {loggedIn && <button className={classes.customButton}>Post</button>}
-        </form>
-      </Card>
-    </div>
+        </div>
+        {uploadTask && (
+          <div>
+            <div
+              className={classes.progress}
+              style={{ width: `${progress}%` }}
+            />
+            <button onClick={onCancelUpload}>Cancel</button>
+          </div>
+        )}
+        {loggedIn ? postcontent : <p>Please log in to begin.</p>}
+        {loggedIn && <button className={classes.customButton}>Post</button>}
+      </form>
+    </Card>
   );
 };
 

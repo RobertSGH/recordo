@@ -1,16 +1,9 @@
 .card {
   display: flex;
   padding: 1rem;
-  margin-bottom: 5rem;
+  margin-bottom: 2rem;
   max-width: 30rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   border-radius: 6px;
-  background: rgb(16, 49, 213);
-  background: radial-gradient(
-    circle,
-    rgba(16, 49, 213, 1) 0%,
-    rgba(64, 137, 204, 1) 12%,
-    rgba(154, 25, 173, 0.5130427170868348) 70%,
-    rgba(24, 188, 218, 0) 100%
-  );
+  background: rgb(89, 152, 234);
 }
