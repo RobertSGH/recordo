@@ -31,16 +31,24 @@
   width: 100%;
 }
 
-.button {
-  white-space: normal;
-  max-width: 100%;
+.login button {
+  font: inherit;
+  font-size: 14px;
+  background-color: rgb(81, 0, 128);
+  border: none;
+  border-radius: 20px;
+  color: white;
+  padding: 8px 16px;
+
+  cursor: pointer;
+  transition: background-color 0.2s;
   word-break: break-word;
 }
 
 .items {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: flex-start;
   gap: 1rem;
   width: 100%;
   padding: 1rem;

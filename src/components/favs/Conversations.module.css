@@ -17,31 +17,38 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.logo {
-  margin-bottom: 1rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 60px;
-}
-
-.logo img {
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
-}
-
 .conversations {
-  flex: 0 0 350px;
+  flex: 0 0 180px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  justify-content: space-between;
   padding: 1rem;
   height: 100%;
   overflow-y: auto;
-  border-right: 1px solid #dbdbdb;
-  max-height: calc(100vh - 60px); /* Add this line */
+  border-right: 1px solid rgba(188, 182, 182, 0.485);
+  border-left: 1px solid rgba(188, 182, 182, 0.485);
+}
+
+.conversationsContent {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.conversationsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.conversationsHeader .logo img {
+  border-radius: 50%;
+  width: 80px;
+  height: 70px;
+  object-fit: cover;
 }
 
 .conversations ul {
@@ -64,7 +71,11 @@
 }
 
 .conversations li:hover {
-  background-color: #e06be2;
+  background-color: rgb(81, 0, 128);
+}
+
+.conversations li.selected {
+  background-color: rgb(81, 0, 128);
 }
 
 .conversations img {
@@ -80,6 +91,24 @@
   justify-content: center;
   margin: 0;
   margin-right: 10px;
+  color: white;
+}
+
+.conversations button {
+  font: inherit;
+  font-size: 14px;
+  background-color: rgb(81, 0, 128);
+  border: none;
+  border-radius: 20px;
+  color: white;
+  padding: 8px 16px;
+  margin-left: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.conversations button:hover {
+  background-color: rgba(81, 0, 128, 0.301);
 }
 
 .messagescontainer {
@@ -87,18 +116,12 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  height: calc(100vh - 60px);
+  border-right: 1px solid rgba(188, 182, 182, 0.485);
 }
 
 .messagesHeader {
   padding: 1rem;
-  border-bottom: 1px solid #dbdbdb;
-}
-
-.messagesList {
-  padding: 1rem;
-  overflow-y: auto;
-  flex-grow: 1;
+  border-bottom: 1px solid rgba(188, 182, 182, 0.485);
 }
 
 .messagescontainer h3 {
@@ -112,27 +135,24 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
-.messagescontainer li {
+.messagesList {
+  padding: 1rem;
+  overflow-y: auto;
+  flex-grow: 1;
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
-  margin-bottom: 1rem;
+  width: 100%;
 }
+
 .messagescontainer img {
   width: 40px;
   height: 40px;
   margin: 0 10px;
   border-radius: 50%;
-}
-.messagescontainer h5 {
-  display: flex;
-  flex-wrap: wrap;
-  width: 100%;
-
-  padding: 8px 12px;
-  border-radius: 18px;
-  font-size: 14px;
 }
 
 .messagescontainer p {
@@ -141,37 +161,82 @@
   margin-top: 4px;
 }
 
+.messagescontainer li {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.userMessage {
+  justify-content: flex-end;
+}
+
+.userMessage,
+.recipientMessage {
+  display: flex;
+  width: 100%;
+}
+
+.userMessage div,
+.recipientMessage div {
+  max-width: 50%;
+}
+
+.userMessage img,
+.recipientMessage img {
+  align-self: flex-start;
+}
+
+.userMessage h5 {
+  background-color: rgba(81, 0, 128, 0.581);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 15px;
+  font-size: 14px;
+  border: 1px solid rgba(81, 0, 128, 0.581);
+}
+
+.recipientMessage h5 {
+  color: white;
+  padding: 8px 12px;
+  border-radius: 18px;
+  font-size: 14px;
+  margin-right: 10px;
+  border: 1px solid rgba(188, 182, 182, 0.485);
+  transition: border-color 0.2s;
+}
+
 .messageInput {
   display: flex;
   flex-direction: row;
   align-items: center;
-  background-color: white;
   padding: 10px;
   box-sizing: border-box;
-  border-top: 1px solid #dbdbdb;
 }
 
 .messageInput input {
   font: inherit;
   border-radius: 20px;
-  background-color: #f0f0f0;
-  border: none;
+  background-color: rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(188, 182, 182, 0.485);
   display: block;
+  box-sizing: border-box;
+  transition: background-color 0.2s, outline-color 0.2s;
   font-size: 14px;
+  color: white;
   flex-grow: 1;
   padding: 8px 16px;
-  box-sizing: border-box;
 }
 
 .messageInput input:focus {
-  background-color: #f8cbf1;
   outline-color: rgb(81, 0, 128);
 }
 
 .messageInput button {
   font: inherit;
   font-size: 14px;
-  background-color: #0095f6;
+  background-color: rgb(81, 0, 128);
   border: none;
   border-radius: 20px;
   color: white;
@@ -182,5 +247,35 @@
 }
 
 .messageInput button:hover {
-  background-color: #0079b3;
+  background-color: rgba(81, 0, 128, 0.301);
+}
+
+.messagesList::-webkit-scrollbar {
+  width: 10px;
+}
+
+.messagesList::-webkit-scrollbar-track {
+  background-color: #0d0909;
+}
+
+.messagesList::-webkit-scrollbar-thumb {
+  background-color: rgb(81, 0, 128);
+  border-radius: 40px;
+}
+
+.conversationsContent button:hover {
+  background-color: rgba(81, 0, 128, 0.301);
+}
+
+.conversationsContent::-webkit-scrollbar {
+  width: 10px;
+}
+
+.conversationsContent::-webkit-scrollbar-track {
+  background-color: #0d0909;
+}
+
+.conversationsContent::-webkit-scrollbar-thumb {
+  background-color: rgb(81, 0, 128);
+  border-radius: 40px;
 }

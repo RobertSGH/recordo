@@ -1,4 +1,3 @@
-import Card from '../UI/layout/Card';
 import classes from './AddPost.module.css';
 import {
   getDownloadURL,
@@ -17,7 +16,7 @@ import {
   getFirestore,
   Timestamp,
 } from 'firebase/firestore';
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 
 const AddPost = (props) => {
   const [loggedIn, setLoggedin] = useState(false);
@@ -30,19 +29,18 @@ const AddPost = (props) => {
   const postsRef = collection(db, 'posts');
   const formRef = useRef(null);
   const fileInputRef = useRef(null);
-  const newUploadTaskRef = useRef(null);
 
   useEffect(() => {
-    const authStateChanged = (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setLoggedin(true);
       } else {
         setLoggedin(false);
       }
-    };
-    onAuthStateChanged(auth, authStateChanged);
+    });
+
     return () => {
-      onAuthStateChanged(auth, authStateChanged);
+      unsubscribe();
     };
   }, []);
 
@@ -53,43 +51,48 @@ const AddPost = (props) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
 
-  const onFileChange = async (e) => {
+  const onFileChange = useCallback(async (e) => {
     const file = e.target.files[0];
     if (!file) {
       return;
     }
     const storage = getStorage();
-    const gsReference = ref(
-      storage,
-      `gs://recordosapp.appspot.com/media/` + file.name
-    );
-    try {
-      newUploadTaskRef.current = uploadBytesResumable(gsReference, file);
-      newUploadTaskRef.current.on('state_changed', (snapshot) => {
+    const gsReference = ref(storage, `media/` + file.name);
+    const uploadTask = uploadBytesResumable(gsReference, file);
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {
         const progressPercentage =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         setProgress(progressPercentage);
-      });
+      },
+      (error) => {
+        console.error('Error uploading file:', error);
+      },
+      () => {
+        getDownloadURL(gsReference).then((url) => {
+          setFileUrl(url);
+        });
+      }
+    );
+    setUploadTask(uploadTask);
+  }, []);
 
-      setFileUrl(await getDownloadURL(gsReference));
-      setUploadTask(newUploadTaskRef.current);
-    } catch (error) {
-      console.error('Error uploading file:', error);
-    }
-  };
-
-  const onCancelUpload = () => {
-    if (newUploadTaskRef.current) {
-      newUploadTaskRef.current.cancel();
+  const onCancelUpload = useCallback(() => {
+    if (uploadTask) {
+      uploadTask.cancel();
       setUploadTask(null);
+      setFileUrl(null);
+      setProgress(0);
       fileInputRef.current.value = null;
     }
-  };
+  }, [uploadTask]);
 
   const onAddPost = async (data) => {
     await addDoc(postsRef, {
@@ -99,62 +102,57 @@ const AddPost = (props) => {
       fileurl: fileUrl,
       date: Timestamp.fromDate(new Date()),
     });
-    formRef.current.reset();
     fileInputRef.current.value = null;
     setProgress(0);
     setFileUrl(null);
     setUploadTask(null);
+    reset();
   };
 
-  let postcontent = (
-    <label htmlFor='inputTag'>
-      Select File
-      <input
-        type='file'
-        id='inputTag'
-        name='file'
-        onChange={onFileChange}
-        ref={fileInputRef}
-        className={classes.customInput}
-      />
-    </label>
-  );
-
   return (
-    <Card>
-      <form
-        className={classes.form}
-        onSubmit={handleSubmit(onAddPost)}
-        ref={formRef}
-      >
-        <div className={classes.control}>
-          <label htmlFor='text'></label>
-          <textarea
-            placeholder='Start sharing!'
-            id='text'
-            rows='5'
-            {...register('text')}
-          ></textarea>
-          {loggedIn && (
-            <p style={{ color: 'red' }}>
-              {' '}
-              {errors.text?.message || errors.selectedCategories?.message}
-            </p>
-          )}
-        </div>
-        {uploadTask && (
-          <div>
-            <div
-              className={classes.progress}
-              style={{ width: `${progress}%` }}
-            />
-            <button onClick={onCancelUpload}>Cancel</button>
+    <form
+      className={classes.form}
+      onSubmit={handleSubmit(onAddPost)}
+      ref={formRef}
+    >
+      {loggedIn ? (
+        <>
+          <div className={classes.control}>
+            <label htmlFor='text'></label>
+            <textarea
+              placeholder='Start sharing!'
+              id='text'
+              rows='5'
+              {...register('text')}
+            ></textarea>
+            <p style={{ color: 'red' }}>{errors.text?.message}</p>
           </div>
-        )}
-        {loggedIn ? postcontent : <p>Please log in to begin.</p>}
-        {loggedIn && <button className={classes.customButton}>Post</button>}
-      </form>
-    </Card>
+          {uploadTask && (
+            <div>
+              <div
+                className={classes.progress}
+                style={{ width: `${progress}%` }}
+              />
+              <button onClick={onCancelUpload}>Cancel</button>
+            </div>
+          )}
+          <label htmlFor='inputTag'>
+            Select File
+            <input
+              type='file'
+              id='inputTag'
+              name='file'
+              onChange={onFileChange}
+              ref={fileInputRef}
+              className={classes.customInput}
+            />
+          </label>
+          <button className={classes.customButton}>Post</button>
+        </>
+      ) : (
+        <p>Please sign in or continue as Guest to begin.</p>
+      )}
+    </form>
   );
 };
 

@@ -87,6 +87,7 @@ const Conversations = () => {
           return data;
         });
         setMessages(updatedMessages);
+        console.log(messages);
       });
       return () => unsub();
     } catch (error) {
@@ -131,40 +132,46 @@ const Conversations = () => {
     <div className={classes.messagingPageContainer}>
       <div className={classes.container}>
         <div className={classes.conversations}>
-          <Link to='/' className={`${classes.logo}`}>
-            <img className='logo-image' src={logo} alt='Logo' />
-          </Link>
-
-          <ul>
-            {conversations.map((conversation) => (
-              <li key={conversation.id}>
-                <Link
-                  to={`/conversations/${conversation.id}`}
-                  className={
-                    conversation.id === selectedConversationId
-                      ? classes.selected
-                      : ''
-                  }
-                  onClick={() => handleSelectConversation(conversation.id)}
-                >
-                  <img
-                    src={
-                      conversation.senderPhoto === user?.photoURL
-                        ? conversation.recipientPhoto
-                        : conversation.senderPhoto
+          <div className={classes.conversationsContent}>
+            <div className={classes.conversationsHeader}>
+              <Link to='/' className={classes.logo}>
+                <img src={logo} alt='Logo' />
+              </Link>
+            </div>
+            <div className={classes.conversationsList}>
+              <ul>
+                {conversations.map((conversation) => (
+                  <li
+                    key={conversation.id}
+                    className={
+                      conversation.id === selectedConversationId
+                        ? classes.selected
+                        : ''
                     }
-                    alt={conversation.name}
-                  />
-                  <h4>
-                    {conversation.recipientName === user?.displayName
-                      ? conversation.senderName
-                      : conversation.recipientName}
-                  </h4>
-                </Link>
-              </li>
-            ))}
-          </ul>
-
+                  >
+                    <Link
+                      to={`/conversations/${conversation.id}`}
+                      onClick={() => handleSelectConversation(conversation.id)}
+                    >
+                      <img
+                        src={
+                          conversation.senderPhoto === user?.photoURL
+                            ? conversation.recipientPhoto
+                            : conversation.senderPhoto
+                        }
+                        alt={conversation.name}
+                      />
+                      <h4>
+                        {conversation.recipientName === user?.displayName
+                          ? conversation.senderName
+                          : conversation.recipientName}
+                      </h4>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
           <button onClick={handleFetchConversations}>Load Conversations</button>
         </div>
         <div className={classes.messagescontainer}>
@@ -178,10 +185,21 @@ const Conversations = () => {
               <ul>
                 {messages.map((message) => (
                   <li key={message.id}>
-                    <img src={message.senderPhoto} alt="Sender's photo" />
-                    <div>
-                      <h5>{message.message}</h5>
-                      <p>{message.date.toLocaleString()}</p>
+                    <div
+                      className={
+                        message.userId === user?.uid
+                          ? classes.userMessage
+                          : classes.recipientMessage
+                      }
+                    >
+                      {message.userId !== user?.uid && (
+                        <img src={message.senderPhoto} alt='Photo' />
+                      )}
+
+                      <div>
+                        <h5>{message.message}</h5>
+                        <p>{message.date.toLocaleString()}</p>
+                      </div>
                     </div>
                   </li>
                 ))}

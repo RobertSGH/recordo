@@ -1,6 +1,24 @@
 .form {
   display: flex;
   flex-direction: column;
+  padding: 1rem;
+}
+
+.form button {
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  background-color: rgb(81, 0, 128);
+  border: none;
+  border-radius: 20px;
+  color: white;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.form button:hover {
+  background-color: rgba(81, 0, 128, 0.301);
 }
 
 .control p {
@@ -16,34 +34,36 @@
 .control input,
 .control textarea {
   font: inherit;
-  padding: 0.35rem;
-  border-radius: 4px;
-  background-color: #f0f0f0dd;
-  border: 1px solid #c1d1d1;
+  border-radius: 20px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(188, 182, 182, 0.485);
   display: block;
-  width: 100%;
-  font-size: 1.25rem;
+  font-size: 14px;
+  flex-grow: 1;
+  padding: 8px 16px;
+  box-sizing: border-box;
+  transition: background-color 0.2s, outline-color 0.2s;
+  color: white;
   resize: none;
 }
 
 .control input:focus,
 .control textarea:focus {
-  background-color: #f8cbf1;
   outline-color: rgb(81, 0, 128);
 }
 
 .progress {
   height: 20px;
-  background-color: #ddd;
-  border-radius: 4px;
+  border-radius: 14px;
+  margin-bottom: 0.2rem;
 }
 
 .progress::before {
   content: '';
   height: 20px;
   display: block;
-  background-color: #7a0144;
-  border-radius: 4px;
+  background-color: rgb(81, 0, 128);
+  border-radius: 14px;
   transition: width 0.2s ease;
 }
 

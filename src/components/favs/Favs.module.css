@@ -14,22 +14,33 @@
 }
 
 .search input {
+  border-radius: 20px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(188, 182, 182, 0.485);
+  display: block;
+  box-sizing: border-box;
+  transition: background-color 0.2s, outline-color 0.2s;
+  font-size: 14px;
+  color: white;
   flex-grow: 1;
-  font: inherit;
-  border-radius: 5px;
-  background-color: #f0f0f0dd;
-  border: 1px solid #c1d1d1;
-  font-size: 1.25rem;
-  resize: none;
+  padding: 8px 16px;
 }
 
 .search input:focus {
-  background-color: #f8cbf1;
   outline-color: rgb(81, 0, 128);
 }
 
 .search button {
-  flex-shrink: 0;
+  font: inherit;
+  font-size: 14px;
+  background-color: rgb(81, 0, 128);
+  border: none;
+  border-radius: 20px;
+  color: white;
+  padding: 8px 16px;
+  margin-left: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s;
 }
 
 .container p {
@@ -57,4 +68,17 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
+}
+
+.container button {
+  font: inherit;
+  font-size: 14px;
+  background-color: rgb(81, 0, 128);
+  border: none;
+  border-radius: 20px;
+  color: white;
+  padding: 8px 16px;
+  margin-left: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s;
 }
