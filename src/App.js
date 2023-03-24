@@ -6,6 +6,7 @@ import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Conversations from './components/favs/Conversations';
 import classes from './App.module.css';
+import UserProfile from './components/favs/UserProfile';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBNogwN8AELoHzMzvjK78eihuzOls0kx38',
@@ -34,6 +35,7 @@ function App() {
             path='/conversations/:conversationId'
             element={<Conversations />}
           />
+          <Route path='/myprofile' element={<UserProfile />}></Route>
         </Routes>
       </Router>
     </div>

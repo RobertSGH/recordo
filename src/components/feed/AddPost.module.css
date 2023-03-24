@@ -45,6 +45,7 @@
   transition: background-color 0.2s, outline-color 0.2s;
   color: white;
   resize: none;
+  width: 100%;
 }
 
 .control input:focus,
@@ -71,7 +72,7 @@
   display: none;
 }
 
-label {
+.form label {
   display: flex;
   flex-direction: column;
   cursor: pointer;

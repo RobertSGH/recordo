@@ -39,10 +39,13 @@
   border-radius: 20px;
   color: white;
   padding: 8px 16px;
-
   cursor: pointer;
   transition: background-color 0.2s;
   word-break: break-word;
+}
+
+.login button:hover {
+  background-color: rgba(81, 0, 128, 0.301);
 }
 
 .items {

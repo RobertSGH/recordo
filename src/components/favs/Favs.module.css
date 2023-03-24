@@ -30,19 +30,6 @@
   outline-color: rgb(81, 0, 128);
 }
 
-.search button {
-  font: inherit;
-  font-size: 14px;
-  background-color: rgb(81, 0, 128);
-  border: none;
-  border-radius: 20px;
-  color: white;
-  padding: 8px 16px;
-  margin-left: 10px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
 .container p {
   margin-right: 15px;
   font-weight: 600;
@@ -78,7 +65,11 @@
   border-radius: 20px;
   color: white;
   padding: 8px 16px;
-  margin-left: 10px;
+
   cursor: pointer;
   transition: background-color 0.2s;
+}
+
+.container button:hover {
+  background-color: rgba(81, 0, 128, 0.301);
 }

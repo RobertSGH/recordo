@@ -10,7 +10,7 @@ import { signOut } from 'firebase/auth';
 import classes from './Login.module.css';
 import { useState, useEffect } from 'react';
 import { getFirestore, doc, setDoc } from 'firebase/firestore';
-import logo from './Recordo-Logo.png';
+import logo from './icons/Recordo-Logo.png';
 import { Link, useNavigate } from 'react-router-dom';
 
 export const Login = () => {
@@ -93,6 +93,11 @@ export const Login = () => {
         {siggnedIn && (
           <Link to='/conversations'>
             <button className={classes.button}>Conversations</button>
+          </Link>
+        )}
+        {siggnedIn && (
+          <Link to='/myprofile'>
+            <button className={classes.button}>Profile</button>
           </Link>
         )}
       </div>

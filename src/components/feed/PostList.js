@@ -1,8 +1,9 @@
 import { collection, getFirestore, onSnapshot } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { Post } from './Post';
+import classes from './PostList.module.css';
 
-const PostList = (props) => {
+const PostList = () => {
   const [list, setList] = useState(null);
   const [displayList, setDisplayList] = useState([]);
   const [limit, setLimit] = useState(3);
@@ -37,16 +38,20 @@ const PostList = (props) => {
   };
 
   return (
-    <div>
+    <div className={classes.list}>
       {displayList.map((post) => (
         <Post post={post} key={post.id} />
       ))}
       {hasMore && (
-        <button onClick={loadMore} disabled={loading}>
+        <button
+          className={classes.loadMore}
+          onClick={loadMore}
+          disabled={loading}
+        >
           Load More
         </button>
       )}
-      {loading && <div>Loading...</div>}
+      {loading && <div className={classes.loading}>Loading...</div>}
     </div>
   );
 };

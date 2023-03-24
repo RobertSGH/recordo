@@ -20,7 +20,7 @@ import {
   URLSearchParamsInit,
 } from 'react-router-dom';
 import classes from './Conversations.module.css';
-import logo from '../UI/layout/Recordo-Logo.png';
+import logo from '../UI/layout/icons/Recordo-Logo.png';
 
 const Conversations = () => {
   const { conversationId } = useParams();

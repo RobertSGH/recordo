@@ -5,10 +5,11 @@ import {
   query,
   where,
   onSnapshot,
+  limit,
 } from 'firebase/firestore';
 import classes from './Favs.module.css';
 import useMessaging from './UseMessaging';
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const MessagingComponent = (props) => {
   const db = getFirestore();
@@ -18,33 +19,52 @@ const MessagingComponent = (props) => {
 
   const handleSearch = async () => {
     try {
-      const q = query(
-        collection(db, 'users'),
-        where('displayName', '==', searchQuery)
-      );
-      const unsubscribe = onSnapshot(q, (querySnapshot) => {
-        setSearchResults(
-          querySnapshot.docs.map((doc) => ({
-            recipientId: doc.id,
-            ...doc.data(),
-          }))
+      if (searchQuery.trim() !== '') {
+        const startName = searchQuery.trim();
+        const endName =
+          startName.slice(0, -1) +
+          String.fromCharCode(startName.charCodeAt(startName.length - 1) + 1);
+
+        const q = query(
+          collection(db, 'users'),
+          where('displayName', '>=', startName),
+          where('displayName', '<', endName),
+          limit(10)
         );
-      });
-      return () => unsubscribe();
+
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+          setSearchResults(
+            querySnapshot.docs.map((doc) => ({
+              recipientId: doc.id,
+              ...doc.data(),
+            }))
+          );
+        });
+        return () => unsubscribe();
+      } else {
+        setSearchResults([]);
+      }
     } catch (error) {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    if (searchQuery.trim() !== '') {
+      handleSearch();
+    } else {
+      setSearchResults([]);
+    }
+  }, [searchQuery]);
 
   return (
     <div className={classes.container}>
       <div className={classes.search}>
         <input
           value={searchQuery}
-          placeholder='Find friends!'
+          placeholder='🔍Find friends!'
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-        <button onClick={handleSearch}>Search</button>
       </div>
       <ul>
         {searchResults.map((user) => (
