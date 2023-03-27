@@ -17,7 +17,7 @@ import useMessaging from '../favs/UseMessaging';
 import formatDate from '../UI/layout/helpers';
 
 export const Post = (props) => {
-  const { post, onDelete } = props;
+  const { post, onDelete, currentUser } = props;
   const db = getFirestore();
   const [user] = useAuthState(auth);
   const [likes, setLikes] = useState(null);
@@ -131,7 +131,11 @@ export const Post = (props) => {
             <span className={classes.likeCount}>{likes?.length || 0}</span>
           </button>
         )}
-        {user && <button onClick={handleDelete}>Delete</button>}
+        {currentUser && currentUser.uid === post.userId && (
+          <button className={classes.deletebutton} onClick={handleDelete}>
+            Delete
+          </button>
+        )}
       </div>
     </div>
   );

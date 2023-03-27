@@ -22,9 +22,8 @@
   position: relative;
   z-index: 1;
   flex: 1;
-  border-left: 1px solid rgba(188, 182, 182, 0.485);
-  border-right: 1px solid rgba(188, 182, 182, 0.485);
   max-width: 350px;
+  border-left: 1px solid rgba(188, 182, 182, 0.485);
 }
 
 .addPost {
@@ -38,6 +37,7 @@
 .postList {
   flex: 1;
   overflow-y: auto;
+  border-right: 1px solid rgba(188, 182, 182, 0.485);
 }
 
 @media (max-width: 767px) {

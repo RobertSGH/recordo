@@ -1,0 +1,49 @@
+.postlistcontainer {
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  position: relative;
+  margin: 0 auto;
+  border-left: 1px solid rgba(188, 182, 182, 0.485);
+}
+
+.postlistcontainer .logo img {
+  border-radius: 50%;
+  width: 80px;
+  height: 70px;
+  object-fit: cover;
+}
+
+.postlistHeader {
+  width: 25%;
+  height: 100%;
+  z-index: 10;
+  position: sticky;
+  top: 0;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  background: rgb(34, 36, 45);
+  background-color: rgb(0, 0, 38);
+  border-bottom: 1px solid rgba(188, 182, 182, 0.485);
+}
+
+.postlistHeader h3 {
+  text-align: center;
+  border-top: 1px solid rgba(188, 182, 182, 0.485);
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+}
+
+.postList {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  border-left: 1px solid rgba(188, 182, 182, 0.485);
+  border-right: 1px solid rgba(188, 182, 182, 0.485);
+  max-width: 350px;
+}

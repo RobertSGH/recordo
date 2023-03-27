@@ -97,7 +97,7 @@ export const Login = () => {
         )}
         {siggnedIn && (
           <Link to='/myprofile'>
-            <button className={classes.button}>Profile</button>
+            <button className={classes.button}>Posts</button>
           </Link>
         )}
       </div>
