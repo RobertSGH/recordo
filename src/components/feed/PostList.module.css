@@ -3,6 +3,7 @@
   align-items: center;
   align-content: center;
   padding-left: 0;
+  border-bottom: 1px solid rgba(188, 182, 182, 0.485);
 }
 
 .loadMore {
