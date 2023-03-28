@@ -7,17 +7,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Conversations from './components/favs/Conversations';
 import classes from './App.module.css';
 import UserProfile from './components/favs/UserProfile';
-
-const firebaseConfig = {
-  apiKey: 'AIzaSyBNogwN8AELoHzMzvjK78eihuzOls0kx38',
-  authDomain: 'recordosapp.firebaseapp.com',
-  projectId: 'recordosapp',
-  storageBucket: 'recordosapp.appspot.com',
-  messagingSenderId: '243100701178',
-  appId: '1:243100701178:web:018931f7a3f36b33981443',
-  databaseURL:
-    'https://recordosapp-default-rtdb.europe-west1.firebasedatabase.app',
-};
+import firebaseConfig from './firebaseConfig';
 
 export const app = initializeApp(firebaseConfig);
 export const db = getDatabase(app);
