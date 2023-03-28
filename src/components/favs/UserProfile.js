@@ -49,14 +49,20 @@ const UserProfile = () => {
         <h3>Posts</h3>
       </div>
       <div className={classes.postList}>
-        {posts.map((post) => (
-          <Post
-            key={post.id}
-            post={post}
-            onDelete={loadUserPosts}
-            currentUser={user}
-          />
-        ))}
+        {posts.length > 0 ? (
+          posts.map((post) => (
+            <Post
+              key={post.id}
+              post={post}
+              onDelete={loadUserPosts}
+              currentUser={user}
+            />
+          ))
+        ) : (
+          <div className={classes.noPostsMessage}>
+            <p>You haven't posted anything yet.</p>
+          </div>
+        )}
       </div>
     </div>
   );

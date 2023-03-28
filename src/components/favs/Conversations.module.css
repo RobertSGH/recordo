@@ -279,3 +279,15 @@
   background-color: rgb(81, 0, 128);
   border-radius: 40px;
 }
+
+.noConversationsMessage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.noConversationsMessage p {
+  font-size: 18px;
+  color: #8e8e8e;
+}

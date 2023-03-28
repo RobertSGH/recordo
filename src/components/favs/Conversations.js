@@ -13,12 +13,7 @@ import {
 } from 'firebase/firestore';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../../App';
-import {
-  Link,
-  useParams,
-  useLocation,
-  URLSearchParamsInit,
-} from 'react-router-dom';
+import { Link, useParams, useLocation } from 'react-router-dom';
 import classes from './Conversations.module.css';
 import logo from '../UI/layout/icons/Recordo-Logo.png';
 
@@ -87,7 +82,6 @@ const Conversations = () => {
           return data;
         });
         setMessages(updatedMessages);
-        console.log(messages);
       });
       return () => unsub();
     } catch (error) {
@@ -139,37 +133,45 @@ const Conversations = () => {
               </Link>
             </div>
             <div className={classes.conversationsList}>
-              <ul>
-                {conversations.map((conversation) => (
-                  <li
-                    key={conversation.id}
-                    className={
-                      conversation.id === selectedConversationId
-                        ? classes.selected
-                        : ''
-                    }
-                  >
-                    <Link
-                      to={`/conversations/${conversation.id}`}
-                      onClick={() => handleSelectConversation(conversation.id)}
+              {conversations.length > 0 ? (
+                <ul>
+                  {conversations.map((conversation) => (
+                    <li
+                      key={conversation.id}
+                      className={
+                        conversation.id === selectedConversationId
+                          ? classes.selected
+                          : ''
+                      }
                     >
-                      <img
-                        src={
-                          conversation.senderPhoto === user?.photoURL
-                            ? conversation.recipientPhoto
-                            : conversation.senderPhoto
+                      <Link
+                        to={`/conversations/${conversation.id}`}
+                        onClick={() =>
+                          handleSelectConversation(conversation.id)
                         }
-                        alt={conversation.name}
-                      />
-                      <h4>
-                        {conversation.recipientName === user?.displayName
-                          ? conversation.senderName
-                          : conversation.recipientName}
-                      </h4>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+                      >
+                        <img
+                          src={
+                            conversation.senderPhoto === user?.photoURL
+                              ? conversation.recipientPhoto
+                              : conversation.senderPhoto
+                          }
+                          alt={conversation.name}
+                        />
+                        <h4>
+                          {conversation.recipientName === user?.displayName
+                            ? conversation.senderName
+                            : conversation.recipientName}
+                        </h4>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <div className={classes.noConversationsMessage}>
+                  <p>No conversations found.</p>
+                </div>
+              )}
             </div>
           </div>
           <button onClick={handleFetchConversations}>Load Conversations</button>
