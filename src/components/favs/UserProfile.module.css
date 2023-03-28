@@ -5,6 +5,9 @@
   position: relative;
   margin: 0 auto;
   border-left: 1px solid rgba(188, 182, 182, 0.485);
+  border-bottom: 1px solid rgba(188, 182, 182, 0.485);
+  border-right: 1px solid rgba(188, 182, 182, 0.485);
+  width: 350px;
 }
 
 .postlistcontainer .logo img {
@@ -15,14 +18,11 @@
 }
 
 .postlistHeader {
-  width: 25%;
   height: 100%;
   z-index: 10;
   position: sticky;
   top: 0;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   background-color: rgb(0, 0, 38);
-  border-bottom: 1px solid rgba(188, 182, 182, 0.485);
   border-right: 1px solid rgba(188, 182, 182, 0.485);
 }
 
@@ -44,8 +44,6 @@
   z-index: 1;
   flex: 1;
   border-left: 1px solid rgba(188, 182, 182, 0.485);
-  border-right: 1px solid rgba(188, 182, 182, 0.485);
-  max-width: 350px;
 }
 
 .noPostsMessage {
