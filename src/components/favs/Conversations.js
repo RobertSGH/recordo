@@ -118,10 +118,6 @@ const Conversations = () => {
     fetchconversations();
   };
 
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const displayName = searchParams.get('displayName');
-
   return (
     <div className={classes.messagingPageContainer}>
       <div className={classes.container}>
@@ -216,7 +212,9 @@ const Conversations = () => {
                 onChange={(event) => setNewMessage(event.target.value)}
                 placeholder='Type a message...'
               />
-              <button onClick={handleSendMessage}>Send</button>
+              <button onClick={handleSendMessage} disabled={!newMessage.trim()}>
+                Send
+              </button>
             </div>
           )}
         </div>

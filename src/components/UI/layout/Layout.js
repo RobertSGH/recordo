@@ -6,6 +6,10 @@ import MessagingComponent from '../../favs/Favs';
 import Login from './Login';
 import UserProfile from '../../favs/UserProfile';
 
+const Footer = () => {
+  return <div className={classes.footer}>&copy; 2023 by Robert</div>;
+};
+
 const Layout = (props) => {
   return (
     <Fragment>
@@ -24,6 +28,9 @@ const Layout = (props) => {
         <div className={classes.rightSide}>
           <MessagingComponent />
         </div>
+      </div>
+      <div>
+        <Footer />
       </div>
     </Fragment>
   );
