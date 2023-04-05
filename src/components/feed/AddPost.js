@@ -101,6 +101,7 @@ const AddPost = (props) => {
       userId: user?.uid,
       fileurl: fileUrl,
       date: Timestamp.fromDate(new Date()),
+      userPhoto: user?.photoURL,
     });
     fileInputRef.current.value = null;
     setProgress(0);

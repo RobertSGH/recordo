@@ -23,13 +23,26 @@ const useMessaging = () => {
   ) => {
     try {
       const conversationsRef = collection(db, 'conversations');
-      const q = query(
+      const q1 = query(
         conversationsRef,
         where('participants', '==', [user.uid, recipientId])
       );
-      const querySnapshot = await getDocs(q);
-      if (!querySnapshot.empty) {
-        const conversation = querySnapshot.docs[0];
+      const q2 = query(
+        conversationsRef,
+        where('participants', '==', [recipientId, user.uid])
+      );
+      const querySnapshot1 = await getDocs(q1);
+      const querySnapshot2 = await getDocs(q2);
+
+      let conversation;
+
+      if (!querySnapshot1.empty) {
+        conversation = querySnapshot1.docs[0];
+      } else if (!querySnapshot2.empty) {
+        conversation = querySnapshot2.docs[0];
+      }
+
+      if (conversation) {
         navigate(
           `/conversations/${conversation.id}?displayName=${displayName}`
         );

@@ -31,6 +31,19 @@
   padding: 0.5rem 0;
 }
 
+.itemHeader img {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px; /* Add a margin to the right of the image */
+  border-radius: 50%;
+}
+
+/* New class for the user information container */
+.userContainer {
+  display: flex;
+  align-items: center;
+}
+
 .text {
   padding: 1rem 0;
   word-wrap: break-word;

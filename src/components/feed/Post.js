@@ -110,9 +110,16 @@ export const Post = (props) => {
   return (
     <div ref={postRef} className={classes.postcontainer}>
       <div className={classes.itemHeader}>
-        <h4 onClick={() => startConversation(user?.uid, post.username, '')}>
-          @{post.username}
-        </h4>
+        <div className={classes.userContainer}>
+          <img src={post.userPhoto} alt='User profile' />
+          <h4
+            onClick={() =>
+              startConversation(post.userId, post.username, post.userPhoto)
+            }
+          >
+            @{post.username}
+          </h4>
+        </div>
         <p className={classes.timestamp}>{formatDate(timestamp)}</p>
       </div>
       <h3 className={classes.text}>{post.text}</h3>
