@@ -17,6 +17,7 @@ import {
   Timestamp,
 } from 'firebase/firestore';
 import { useEffect, useCallback } from 'react';
+import heic2any from 'heic2any';
 
 const AddPost = (props) => {
   const [loggedIn, setLoggedin] = useState(false);
@@ -62,9 +63,28 @@ const AddPost = (props) => {
     if (!file) {
       return;
     }
+    let fileToUpload = file;
+    const isHeic = /\.(heic)$/i.test(file.name);
+
+    if (isHeic) {
+      try {
+        const blob = await heic2any({
+          blob: file,
+          toType: 'image/jpeg',
+          quality: 0.8,
+        });
+        fileToUpload = new File([blob], file.name.replace(/\.heic$/i, '.jpg'), {
+          type: 'image/jpeg',
+        });
+      } catch (error) {
+        console.error('Error converting HEIC to JPEG:', error);
+        return;
+      }
+    }
+
     const storage = getStorage();
-    const gsReference = ref(storage, `media/` + file.name);
-    const uploadTask = uploadBytesResumable(gsReference, file);
+    const gsReference = ref(storage, `media/` + fileToUpload.name);
+    const uploadTask = uploadBytesResumable(gsReference, fileToUpload);
     uploadTask.on(
       'state_changed',
       (snapshot) => {

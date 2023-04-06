@@ -18,7 +18,6 @@ import logo from '../UI/layout/icons/Recordo-Logo.png';
 const UserProfile = () => {
   const db = getFirestore();
   const [user] = useAuthState(auth);
-  const [userPosts, setUserPosts] = useState([]);
   const [posts, setPosts] = useState([]);
 
   const loadUserPosts = async () => {

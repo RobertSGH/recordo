@@ -15,6 +15,7 @@ import { auth } from '../../App';
 import { useEffect, useState, useRef } from 'react';
 import useMessaging from '../favs/UseMessaging';
 import formatDate from '../UI/layout/helpers';
+import { getStorage, ref, deleteObject } from 'firebase/storage';
 
 export const Post = (props) => {
   const { post, onDelete, currentUser } = props;
@@ -77,29 +78,47 @@ export const Post = (props) => {
 
   const hasUserLiked = likes?.find((like) => like.userId === user?.uid);
 
+  const getMediaType = (url) => {
+    const imagePattern =
+      /\.(jpeg|jpg|gif|png|heic|bmp|webp|tiff|avif)(\?.*)?$/i;
+    const videoPattern = /\.(mp4|webm|ogg|mov|avi|mkv|flv)(\?.*)?$/i;
+
+    if (imagePattern.test(url)) {
+      return 'image';
+    } else if (videoPattern.test(url)) {
+      return 'video';
+    }
+    return 'unknown';
+  };
+
   const renderMediaElement = () => {
-    if (post.fileurl) {
-      if (post.fileurl.match(/\.(jpeg|jpg|gif|png)$|\.(jpeg|jpg|gif|png)/)) {
-        return (
-          <img
-            src={post.fileurl}
-            onClick={() => window.open(post.fileurl, '_blank')}
-          />
-        );
-      } else {
-        return (
-          <video
-            src={post.fileurl}
-            controls
-            type='video/mp4'
-            onClick={() => window.open(post.fileurl, '_blank')}
-          />
-        );
-      }
+    const mediaType = getMediaType(post.fileurl);
+    console.log(mediaType);
+    if (post.fileurl && mediaType === 'image') {
+      return (
+        <img
+          src={post.fileurl}
+          onClick={() => window.open(post.fileurl, '_blank')}
+        />
+      );
+    } else if (post.fileurl && mediaType === 'video') {
+      return (
+        <video
+          src={post.fileurl}
+          controls
+          type='video/mp4'
+          onClick={() => window.open(post.fileurl, '_blank')}
+        />
+      );
     }
   };
 
   const handleDelete = async () => {
+    const storage = getStorage();
+    const fileRef = ref(storage, post.fileurl);
+
+    await deleteObject(fileRef);
+
     await deleteDoc(doc(db, 'posts', post.id));
 
     if (onDelete) {
